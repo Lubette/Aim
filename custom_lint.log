@@ -1,0 +1,66 @@
+The request analysis.setContextRoots failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+ProcessException: No such file or directory
+  Command: flutter pub get
+at:
+#0      _ProcessImpl._start (dart:io-patch/process_patch.dart:402:33)
+#1      Process.start (dart:io-patch/process_patch.dart:38:20)
+#2      _runNonInteractiveProcess (dart:io-patch/process_patch.dart:579:18)
+#3      Process.run (dart:io-patch/process_patch.dart:49:12)
+#4      CustomLintWorkspace.runPubGet (package:custom_lint/src/workspace.dart:755:36)
+#5      CustomLintWorkspace.resolvePluginHost (package:custom_lint/src/workspace.dart:748:11)
+#6      SocketCustomLintServerToClientChannel._startProcess (package:custom_lint/src/v2/server_to_client_channel.dart:151:24)
+#7      SocketCustomLintServerToClientChannel.init (package:custom_lint/src/v2/server_to_client_channel.dart:110:22)
+#8      CustomLintServer._maybeSpawnCustomLintPlugin (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:394:25)
+<asynchronous suspension>
+#9      CustomLintServer._handleAnalysisSetContextRoots.<anonymous closure> (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:341:9)
+<asynchronous suspension>
+#10     PendingOperation.run (package:custom_lint/src/async_operation.dart:22:14)
+<asynchronous suspension>
+#11     CustomLintServer._handleRequest (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:173:22)
+<asynchronous suspension>
+
+The request analysis.setContextRoots failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+ProcessException: No such file or directory
+  Command: flutter pub get
+at:
+#0      _ProcessImpl._start (dart:io-patch/process_patch.dart:402:33)
+#1      Process.start (dart:io-patch/process_patch.dart:38:20)
+#2      _runNonInteractiveProcess (dart:io-patch/process_patch.dart:579:18)
+#3      Process.run (dart:io-patch/process_patch.dart:49:12)
+#4      CustomLintWorkspace.runPubGet (package:custom_lint/src/workspace.dart:755:36)
+#5      CustomLintWorkspace.resolvePluginHost (package:custom_lint/src/workspace.dart:748:11)
+#6      SocketCustomLintServerToClientChannel._startProcess (package:custom_lint/src/v2/server_to_client_channel.dart:151:24)
+#7      SocketCustomLintServerToClientChannel.init (package:custom_lint/src/v2/server_to_client_channel.dart:110:22)
+#8      CustomLintServer._maybeSpawnCustomLintPlugin (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:394:25)
+<asynchronous suspension>
+#9      CustomLintServer._handleAnalysisSetContextRoots.<anonymous closure> (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:341:9)
+<asynchronous suspension>
+#10     PendingOperation.run (package:custom_lint/src/async_operation.dart:22:14)
+<asynchronous suspension>
+#11     CustomLintServer._handleRequest (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:173:22)
+<asynchronous suspension>
+
+The request analysis.setContextRoots failed with the following error:
+RequestErrorCode.PLUGIN_ERROR
+ProcessException: No such file or directory
+  Command: flutter pub get
+at:
+#0      _ProcessImpl._start (dart:io-patch/process_patch.dart:402:33)
+#1      Process.start (dart:io-patch/process_patch.dart:38:20)
+#2      _runNonInteractiveProcess (dart:io-patch/process_patch.dart:579:18)
+#3      Process.run (dart:io-patch/process_patch.dart:49:12)
+#4      CustomLintWorkspace.runPubGet (package:custom_lint/src/workspace.dart:755:36)
+#5      CustomLintWorkspace.resolvePluginHost (package:custom_lint/src/workspace.dart:748:11)
+#6      SocketCustomLintServerToClientChannel._startProcess (package:custom_lint/src/v2/server_to_client_channel.dart:151:24)
+#7      SocketCustomLintServerToClientChannel.init (package:custom_lint/src/v2/server_to_client_channel.dart:110:22)
+#8      CustomLintServer._maybeSpawnCustomLintPlugin (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:394:25)
+<asynchronous suspension>
+#9      CustomLintServer._handleAnalysisSetContextRoots.<anonymous closure> (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:341:9)
+<asynchronous suspension>
+#10     PendingOperation.run (package:custom_lint/src/async_operation.dart:22:14)
+<asynchronous suspension>
+#11     CustomLintServer._handleRequest (package:custom_lint/src/v2/custom_lint_analyzer_plugin.dart:173:22)
+<asynchronous suspension>
+
