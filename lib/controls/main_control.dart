@@ -87,6 +87,7 @@ class MainControl extends GetxController {
           element.value.remove(item);
           element.value.add(item);
           update();
+          save();
           return;
         }
       }
@@ -191,9 +192,15 @@ class MainControl extends GetxController {
   void removeTodo(String uuid) {
     for (var element in todos.entries) {
       element.value.removeWhere(
-        (element) => element.id == uuid,
+        (element) {
+          if (element.id == uuid) {
+            update();
+            save();
+            return true;
+          }
+          return false;
+        },
       );
-      update();
     }
   }
 
