@@ -1,0 +1,27 @@
+display_name: TodoList
+package_name: TodoList
+
+maintainer:
+  name: Lubette
+  email: jinhong.zeng@mail.ru
+
+priority: optional
+section: x11
+
+essential: false
+installed_size: 6604
+icon: assets/logo.png
+postinstall_scripts:
+  - echo "Installed my awesome app"
+postuninstall_scripts:
+  - echo "Surprised Pickachu face"
+keywords:
+  - Todo
+  - List
+  - Task
+
+generic_name: Todo List Appliation
+categories:
+  - Todo
+
+startup_notify: true
