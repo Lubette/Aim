@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lubette_todo_flutter/controls/use_hooks.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class NavigationItem extends StatelessWidget {
   const NavigationItem({
@@ -17,16 +18,16 @@ class NavigationItem extends StatelessWidget {
     final (decoration, fontWidget) = !isSelected
         ? (
             BoxDecoration(
-              color: theme.colorScheme.primary,
+              color: ShadTheme.of(context).colorScheme.background,
             ),
             null
           )
         : (
             BoxDecoration(
-              color: theme.colorScheme.primary,
+              color: ShadTheme.of(context).colorScheme.background,
               border: Border(
                 bottom: BorderSide(
-                  color: Theme.of(context).colorScheme.onPrimary,
+                  color: ShadTheme.of(context).colorScheme.foreground,
                   width: 3.5,
                 ),
               ),

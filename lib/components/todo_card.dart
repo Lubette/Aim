@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lubette_todo_flutter/controls/main_control.dart';
@@ -7,79 +5,61 @@ import 'package:lubette_todo_flutter/controls/use_hooks.dart';
 import 'package:lubette_todo_flutter/data/todo_task.dart';
 import 'package:lubette_todo_flutter/pages/add_todo_page.dart';
 import 'package:lubette_todo_flutter/pages/count_time_page.dart';
-import 'package:lubette_todo_flutter/components/text_button.dart' as lubette;
-import 'package:flutter_context_menu/flutter_context_menu.dart';
 import 'package:lubette_todo_flutter/pages/todo_details_page.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class TodoCard extends StatelessWidget {
-  TodoCard({super.key, required this.todo}) {
-    menu = ContextMenu(
-      borderRadius: BorderRadius.circular(0),
-      boxDecoration: BoxDecoration(
-        color: Colors.white,
-        border: Border.all(
-          color: Colors.black,
-          width: 1.5,
+  final TodoTask todo;
+  const TodoCard({super.key, required this.todo});
+  @override
+  Widget build(BuildContext context) {
+    final theme = useTheme(context);
+    return ShadContextMenuRegion(
+      constraints: const BoxConstraints(minWidth: 200),
+      items: [
+        ShadContextMenuItem.inset(
+          child: Text('开始计时'),
+          onPressed: () => Get.to(
+            () => CountTimePage(
+              todo,
+            ),
+          ),
         ),
-      ),
-      entries: <ContextMenuEntry>[
-        MenuItem(
-          label: '修改',
-          icon: Icons.create,
-          onSelected: () {
-            Get.to(
-              TodoPage(
-                taskType: TodoTaskType.normal,
-                title: '修改Todo',
-                todo: todo,
-                firstPressed: (todo) {
-                  final controller = Get.find<MainControl>();
-                  controller.setTodo(todo);
-                  Get.back();
-                },
-                secendPressed: (_) => Get.back(),
-                firstText: '修改',
-                secendText: '退出',
-              ),
-            );
-          },
+        ShadContextMenuItem.inset(
+          child: Text('查看详情'),
+          onPressed: () => Get.to(
+            () => TodoDetailsPage(
+              todo: todo,
+            ),
+          ),
         ),
-        MenuItem(
-          label: '删除',
-          icon: Icons.delete,
-          onSelected: () {
+        ShadContextMenuItem.inset(
+          child: Text('修改内容'),
+          onPressed: () => Get.to(
+            TodoPage(
+              taskType: TodoTaskType.normal,
+              title: '修改Todo',
+              todo: todo,
+              firstPressed: (todo) {
+                final controller = Get.find<MainControl>();
+                controller.setTodo(todo);
+                Get.back();
+              },
+              secendPressed: (_) => Get.back(),
+              firstText: '修改',
+              secendText: '退出',
+            ),
+          ),
+        ),
+        ShadContextMenuItem.inset(
+          child: Text('删除Todo'),
+          onPressed: () {
             final control = Get.find<MainControl>();
             control.removeTodo(todo.id);
           },
         ),
       ],
-      padding: const EdgeInsets.all(8.0),
-    );
-  }
-  final TodoTask todo;
-
-  late ContextMenu menu;
-  @override
-  Widget build(BuildContext context) {
-    final theme = useTheme(context);
-    return Listener(
-      onPointerDown: (event) {
-        printInfo(info: '${event.buttons}');
-        if (event.kind == PointerDeviceKind.mouse) {
-          // 判断是否是右键
-          if (event.buttons == 2) {
-            menu.position = event.position;
-            showContextMenu(context, contextMenu: menu);
-          }
-        }
-      },
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.white70,
-          border: Border.all(
-            width: 1.5,
-          ),
-        ),
+      child: ShadCard(
         child: LayoutBuilder(
           builder: (context, box) {
             return Padding(
@@ -100,29 +80,22 @@ class TodoCard extends StatelessWidget {
                   Text(
                     todo.title,
                     maxLines: 1,
-                    style: TextStyle(
-                      color: theme.colorScheme.onPrimary,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                    style: ShadTheme.of(
+                      context,
+                    ).textTheme.h4.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
                   ),
                   RichText(
                     text: TextSpan(
                       children: [
                         TextSpan(
                           text: '任务状态：',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: theme.colorScheme.onPrimary,
-                            fontSize: 16,
-                          ),
+                          style: ShadTheme.of(context).textTheme.p,
                         ),
                         TextSpan(
                           text: todo.isCompleted ? '已完成' : '未完成',
-                          style: TextStyle(
-                            color: theme.colorScheme.onPrimary,
-                            fontSize: 16,
-                          ),
+                          style: ShadTheme.of(context).textTheme.p,
                         )
                       ],
                     ),
@@ -138,11 +111,7 @@ class TodoCard extends StatelessWidget {
                           children: [
                             TextSpan(
                               text: '任务内容：',
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: theme.colorScheme.onPrimary,
-                                fontSize: 16,
-                              ),
+                              style: ShadTheme.of(context).textTheme.p,
                             ),
                             TextSpan(
                               text: markdownToPlainText(
@@ -150,11 +119,7 @@ class TodoCard extends StatelessWidget {
                                     ? todo.description
                                     : '无',
                               ),
-                              style: TextStyle(
-                                color: theme.colorScheme.onPrimary,
-                                fontFamily: 'JBMN',
-                                fontSize: 16,
-                              ),
+                              style: ShadTheme.of(context).textTheme.p,
                             )
                           ],
                         ),
@@ -204,16 +169,13 @@ class TodoCard extends StatelessWidget {
         child: Expanded(
           child: Padding(
             padding: EdgeInsets.only(right: size.$1 * 0.01),
-            child: lubette.TextButton(
-              onPress: () => Get.to(
+            child: ShadButton.outline(
+              onPressed: () => Get.to(
                 () => CountTimePage(
                   todo,
                 ),
               ),
-              text: Padding(
-                padding: useEdgeNoOnly(height: size.$2 * 0.04),
-                child: Text('开始计时'),
-              ),
+              child: Text('开始计时'),
             ),
           ),
         ),
@@ -221,17 +183,14 @@ class TodoCard extends StatelessWidget {
       Expanded(
         child: Padding(
           padding: EdgeInsets.only(left: size.$1 * 0.01),
-          child: lubette.TextButton(
-            onPress: () => Get.to(
+          child: ShadButton.outline(
+            onPressed: () => Get.to(
               () => TodoDetailsPage(
                 todo: todo,
               ),
             ),
-            text: Padding(
-              padding: useEdgeNoOnly(height: size.$2 * 0.04),
-              child: Text(
-                '查看详情',
-              ),
+            child: Text(
+              '查看详情',
             ),
           ),
         ),

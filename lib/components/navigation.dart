@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:lubette_todo_flutter/components/navigation_item.dart';
 import 'package:lubette_todo_flutter/controls/use_hooks.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class Navigation extends StatelessWidget {
   const Navigation({
@@ -29,7 +30,6 @@ class Navigation extends StatelessWidget {
                 final value = count++;
                 return InkWell(
                   onTap: () => onItemTap(value),
-                  hoverColor: Theme.of(context).primaryColor,
                   child: element,
                 );
               },

@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:lubette_todo_flutter/controls/main_control.dart';
 import 'package:lubette_todo_flutter/data/theme_data.dart';
 import 'package:lubette_todo_flutter/pages/main_page.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main(List<String> args) async {
@@ -41,12 +42,18 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(
-      debugShowCheckedModeBanner: false,
-      builder: EasyLoading.init(),
-      theme: themeData(),
-      home: MainPage(),
-      defaultTransition: Transition.native,
+    return ShadApp.custom(
+      theme: ShadThemeData(
+        brightness: Brightness.dark,
+        colorScheme: const ShadSlateColorScheme.light(),
+      ),
+      appBuilder: (context, theme) => GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        builder: EasyLoading.init(),
+        theme: theme,
+        home: MainPage(),
+        defaultTransition: Transition.native,
+      ),
     );
   }
 }
