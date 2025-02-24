@@ -7,6 +7,7 @@ import 'package:lubette_todo_flutter/controls/main_control.dart';
 import 'package:lubette_todo_flutter/controls/use_hooks.dart';
 import 'package:lubette_todo_flutter/data/todo_task.dart';
 import 'package:lubette_todo_flutter/components/text_button.dart' as lubette;
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class CountTimePage extends StatefulWidget {
   const CountTimePage(this.task, {super.key});
@@ -58,7 +59,12 @@ class _CountTimePageState extends State<CountTimePage> {
     final media = useMediaQuery(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('任务计时'),
+        title: Text(
+          '任务计时',
+          style: ShadTheme.of(
+            context,
+          ).textTheme.h4,
+        ),
         leading: IconButton(
           onPressed: () {
             // showDialog(context: context, builder: (context) => TodoDialog()

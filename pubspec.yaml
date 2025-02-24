@@ -2,7 +2,7 @@ name: lubette_todo_flutter
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -16,7 +16,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
 # In Windows, build-name is used as the major, minor, and patch parts
 # of the product and file versions while build-number is used as the build suffix.
-version: 1.0.0+1
+version: 1.0.1+1
 
 environment:
   sdk: ^3.6.1
@@ -47,6 +47,7 @@ dependencies:
   flutter_hooks: ^0.20.5
   flutter_easyloading: ^3.0.5
   shadcn_ui: ^0.20.3
+  url_launcher: ^6.3.1
 
 dev_dependencies:
   flutter_test:
@@ -64,7 +65,6 @@ dev_dependencies:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -90,8 +90,8 @@ flutter:
     - family: LXGW
       fonts:
         - asset: assets/LXGWNeoXiHeiPlus.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
+    #       - asset: fonts/Schyler-Italic.ttf
+    #         style: italic
     - family: JBMN
       fonts:
         - asset: assets/JetBrainsMonoNerdFontMono-Medium.ttf

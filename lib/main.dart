@@ -2,10 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:lubette_todo_flutter/controls/main_control.dart';
-import 'package:lubette_todo_flutter/data/theme_data.dart';
 import 'package:lubette_todo_flutter/pages/main_page.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:window_manager/window_manager.dart';
@@ -43,9 +41,26 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ShadApp.custom(
+      themeMode: ThemeMode.light,
       theme: ShadThemeData(
+        brightness: Brightness.light,
+        colorScheme: ShadColorScheme.fromName(
+          'zinc',
+          brightness: Brightness.light,
+        ),
+        textTheme: ShadTextTheme(
+          family: 'JBMN',
+        ),
+      ),
+      darkTheme: ShadThemeData(
         brightness: Brightness.dark,
-        colorScheme: const ShadSlateColorScheme.light(),
+        colorScheme: ShadColorScheme.fromName(
+          'zinc',
+          brightness: Brightness.dark,
+        ),
+        textTheme: ShadTextTheme(
+          family: 'JBMN',
+        ),
       ),
       appBuilder: (context, theme) => GetMaterialApp(
         debugShowCheckedModeBanner: false,

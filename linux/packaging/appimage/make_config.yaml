@@ -1,0 +1,13 @@
+display_name: TodoList
+icon: assets/logo.png
+
+keywords:
+  - Todo
+  - Task
+
+generic_name: TodoList Application
+categories:
+  - Utility
+
+supported_mime_type:
+  - x-scheme-handler/todo

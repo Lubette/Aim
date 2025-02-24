@@ -1,16 +1,27 @@
-# lubette_todo_flutter
+# FTodoList
 
-A new Flutter project.
 
 ## Getting Started
+Instructions on how to get a copy of the project up and running on your local machine.
 
-This project is a starting point for a Flutter application.
+### Prerequisites
+List any software, libraries, or hardware needed to run this project.
+ Lists : 
+ - **List 1** : some description
+ - **List 2** : some description
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Installing
+A step-by-step guide on how to install the project.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Usage
+Instructions on how to use the project or its features.
+
+## Contributing
+Guidelines on how to contribute to the project.
+
+## License
+This project is licensed under the [License Name] - see the [LICENSE.md](LICENSE.md) file for details.
+
+## Acknowledgments
+Mention anyone who contributed to the project or inspired you. 

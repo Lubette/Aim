@@ -17,8 +17,8 @@ class TodoView extends StatelessWidget {
     return LayoutBuilder(
       builder: (context, box) {
         final count = () {
-          return (box.maxWidth / 270).toInt() != 0
-              ? (box.maxWidth / 270).toInt()
+          return (box.maxWidth / 350).toInt() != 0
+              ? (box.maxWidth / 350).toInt()
               : 1;
         }();
         return GridView.builder(
