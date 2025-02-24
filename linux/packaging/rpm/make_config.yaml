@@ -1,0 +1,24 @@
+icon: assets/logo.png
+summary: A really cool application
+group: Application/Emulator
+vendor: JinHong Zhen
+packager: Jinhong Zhen
+packagerEmail: zjh_34@qq.com
+license: MIT
+url: https://github.com/lubette
+
+display_name: TodoList
+
+keywords:
+  - Application
+
+generic_name: Cool Application
+
+categories:
+  - Cool
+  - Awesome
+
+startup_notify: true
+# You can also specify [metainfo](https://freedesktop.org/software/appstream/docs/chap-Quickstart.html) file
+# which contains metadata of the app.
+# metainfo: linux/packaging/myappid.appdata.xml

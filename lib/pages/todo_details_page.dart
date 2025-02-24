@@ -8,6 +8,8 @@ import 'package:lubette_todo_flutter/controls/use_hooks.dart';
 import 'package:lubette_todo_flutter/data/todo_task.dart';
 import 'package:markdown_widget/markdown_widget.dart';
 import 'package:flutter_highlight/themes/atom-one-dark.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TodoDetailsPage extends HookWidget {
   const TodoDetailsPage({super.key, required this.todo});
@@ -19,9 +21,11 @@ class TodoDetailsPage extends HookWidget {
     final completed = useState(todo.isCompleted);
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: media.size.height * 0.09,
         title: Text(
           todo.title,
+          style: ShadTheme.of(
+            context,
+          ).textTheme.h4,
         ),
       ),
       body: SingleChildScrollView(
@@ -43,18 +47,17 @@ class TodoDetailsPage extends HookWidget {
                     children: [
                       TextSpan(
                         text: '任务状态：',
-                        style: TextStyle(
-                          color: theme.colorScheme.onPrimary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: ShadTheme.of(
+                          context,
+                        ).textTheme.h4.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       TextSpan(
                         text: completed.value ? '已完成' : '未完成',
-                        style: TextStyle(
-                          color: theme.colorScheme.onPrimary,
-                          fontSize: 20,
-                        ),
+                        style: ShadTheme.of(
+                          context,
+                        ).textTheme.h4,
                       )
                     ],
                   ),
@@ -64,92 +67,90 @@ class TodoDetailsPage extends HookWidget {
                     children: [
                       TextSpan(
                         text: '创建时间：',
-                        style: TextStyle(
-                          color: theme.colorScheme.onPrimary,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: ShadTheme.of(
+                          context,
+                        ).textTheme.h4.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                       ),
                       TextSpan(
                         text:
                             '${todo.startDate.year}-${todo.startDate.month}-${todo.startDate.day} ${todo.startDate.hour}:${todo.startDate.minute}:${todo.startDate.second}',
-                        style: TextStyle(
-                          color: theme.colorScheme.onPrimary,
-                          fontSize: 20,
-                        ),
+                        style: ShadTheme.of(
+                          context,
+                        ).textTheme.h4,
                       )
                     ],
                   ),
                 ),
-                Row(
-                  children: [
-                    Text(
-                      '任务详情：',
-                      style: TextStyle(
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    todo.description.isNotEmpty
-                        ? Container()
-                        : Text(
-                            '无',
-                            style: TextStyle(
-                              fontSize: 20,
-                            ),
-                          ),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Text(
+                //       '任务详情：',
+                //       style: ShadTheme.of(
+                //         context,
+                //       ).textTheme.h4.copyWith(
+                //             fontWeight: FontWeight.bold,
+                //           ),
+                //     ),
+                //     todo.description.isNotEmpty
+                //         ? Container()
+                //         : Text(
+                //             '无',
+                //             style: ShadTheme.of(
+                //               context,
+                //             ).textTheme.h4,
+                //           ),
+                //   ],
+                // ),
                 todo.description.isEmpty
                     ? Container()
-                    : Container(
-                        decoration: BoxDecoration(
-                          color: theme.colorScheme.secondary,
-                          border: Border.all(
-                            color: theme.colorScheme.onPrimary,
-                            width: 2,
+                    : ShadCard(
+                        child: MarkdownBlock(
+                          data: todo.description,
+                          config: MarkdownConfig(
+                            configs: [
+                              PConfig(
+                                textStyle: ShadTheme.of(
+                                  context,
+                                ).textTheme.p,
+                              ),
+                              CodeConfig(
+                                style: ShadTheme.of(
+                                  context,
+                                ).textTheme.p,
+                              ),
+                              LinkConfig(
+                                onTap: (value) => launchUrl(
+                                  Uri.parse(
+                                    value,
+                                  ),
+                                ).then(
+                                  (result) => result
+                                      ? EasyLoading.showToast('打开链接成功')
+                                      : EasyLoading.showToast('打开链接失败'),
+                                ),
+                                style: ShadTheme.of(
+                                  context,
+                                ).textTheme.p.copyWith(
+                                      color: ShadTheme.of(
+                                        context,
+                                      ).colorScheme.primary,
+                                      fontStyle: FontStyle.italic,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                              ),
+                              PreConfig(
+                                theme: atomOneDarkTheme,
+                              ),
+                              CodeConfig(
+                                style: TextStyle(
+                                  fontFamily: 'JBMN',
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        child: Padding(
-                            padding: useEdgeNoOnly(
-                              width: 10,
-                            ),
-                            child: MarkdownBlock(
-                              data: todo.description,
-                              config: MarkdownConfig(
-                                configs: [
-                                  PConfig(
-                                    textStyle: TextStyle(
-                                      fontFamily: 'JBMN',
-                                    ),
-                                  ),
-                                  CodeConfig(
-                                      style: TextStyle(
-                                    fontFamily: 'JBMN',
-                                  )),
-                                  LinkConfig(
-                                    onTap: (value) {
-                                      print(value);
-                                    },
-                                  ),
-                                  PreConfig(
-                                    theme: atomOneDarkTheme,
-                                  ),
-                                  CodeConfig(
-                                    style: TextStyle(
-                                      fontFamily: 'JBMN',
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                            // child: Text(
-                            //   todo.description,
-                            //   style: TextStyle(
-                            //     fontSize: 17,
-                            //   ),
-                            // ),
-                            ),
                       ),
               ],
             ),

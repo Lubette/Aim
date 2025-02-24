@@ -46,10 +46,11 @@ class NavigationItem extends StatelessWidget {
         ),
         child: Text(
           title,
-          style: TextStyle(
-            fontSize: 20,
-            fontWeight: fontWidget,
-          ),
+          style: ShadTheme.of(
+            context,
+          ).textTheme.h4.copyWith(
+                fontWeight: fontWidget,
+              ),
         ),
       ),
     );

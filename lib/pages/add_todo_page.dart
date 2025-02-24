@@ -5,6 +5,7 @@ import 'package:lubette_todo_flutter/controls/use_hooks.dart';
 import 'package:lubette_todo_flutter/data/todo_task.dart';
 import 'package:lubette_todo_flutter/components/text_box.dart';
 import 'package:lubette_todo_flutter/components/text_button.dart' as lubette;
+import 'package:shadcn_ui/shadcn_ui.dart';
 
 class TodoPage extends StatelessWidget {
   TodoPage({
@@ -37,9 +38,11 @@ class TodoPage extends StatelessWidget {
     final media = useMediaQuery(context);
     return Scaffold(
       appBar: AppBar(
-        toolbarHeight: media.size.height * 0.09,
         title: Text(
           title,
+          style: ShadTheme.of(
+            context,
+          ).textTheme.h4,
         ),
       ),
       body: Padding(
@@ -50,21 +53,78 @@ class TodoPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           spacing: media.size.height * 0.02,
           children: [
-            TextBox(
-              '任务标题',
-              maxLines: 1,
+            ShadInputFormField(
+              placeholder: Text(
+                '输入标题',
+                style: ShadTheme.of(
+                  context,
+                ).textTheme.p,
+              ),
+              label: Text(
+                '任务标题',
+                style: ShadTheme.of(
+                  context,
+                ).textTheme.h4.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
+              maxLines: null,
+              minLines: 1,
               controller: _titleControl,
+              style: ShadTheme.of(
+                context,
+              ).textTheme.p,
             ),
-            TextBox(
-              '具体内容',
+            ShadInputFormField(
+              placeholder: Text(
+                '输入内容',
+                style: ShadTheme.of(
+                  context,
+                ).textTheme.p,
+              ),
+              label: Text(
+                '任务内容',
+                style: ShadTheme.of(
+                  context,
+                ).textTheme.h4.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+              ),
               maxLines: null,
               minLines: 2,
               controller: _docControl,
+              style: ShadTheme.of(
+                context,
+              ).textTheme.p,
             ),
-            buildDatePick(context),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                ShadDatePickerFormField(
+                  label: Text(
+                    '截至日期',
+                    style: ShadTheme.of(
+                      context,
+                    ).textTheme.h4.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                  ),
+                  placeholder: Text(
+                    '选择截至日期',
+                    style: ShadTheme.of(
+                      context,
+                    ).textTheme.p,
+                  ),
+                  onSaved: (date) {
+                    _dueDateControl.text = date.toString();
+                  },
+                ),
+                Spacer(),
+              ],
+            ),
             Row(
               mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
@@ -76,19 +136,16 @@ class TodoPage extends StatelessWidget {
                       height: media.size.height * 0.08,
                       child: GetBuilder<MainControl>(
                         builder: (control) {
-                          return lubette.TextButton(
-                            onPress: () {
+                          return ShadButton(
+                            onPressed: () {
                               todo.title = _titleControl.text;
                               todo.description = _docControl.text;
                               firstPressed(
                                 todo,
                               );
                             },
-                            text: Text(
+                            child: Text(
                               firstText,
-                              style: TextStyle(
-                                fontSize: 17,
-                              ),
                             ),
                           );
                         },
@@ -103,13 +160,10 @@ class TodoPage extends StatelessWidget {
                     ),
                     child: SizedBox(
                       height: media.size.height * 0.08,
-                      child: lubette.TextButton(
-                        onPress: () => secendPressed(todo),
-                        text: Text(
+                      child: ShadButton.outline(
+                        onPressed: () => secendPressed(todo),
+                        child: Text(
                           secendText,
-                          style: TextStyle(
-                            fontSize: 17,
-                          ),
                         ),
                       ),
                     ),
@@ -120,46 +174,6 @@ class TodoPage extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget buildDatePick(BuildContext context) {
-    if (taskType == TodoTaskType.today) {
-      return Container();
-    }
-    final theme = useTheme(context);
-    return TextBox(
-      '截至日期',
-      controller: _dueDateControl,
-      readOnly: true,
-      onTap: () => showDatePicker(
-          context: context,
-          helpText: '选择截至日期',
-          initialDate: DateTime.now(),
-          initialDatePickerMode: DatePickerMode.day,
-          initialEntryMode: DatePickerEntryMode.calendarOnly,
-          firstDate: DateTime.now(),
-          lastDate: DateTime.now().add(
-            Duration(
-              days: 365 * 10,
-            ),
-          ),
-          builder: (context, Widget? child) {
-            return Theme(
-              data: ThemeData(
-                textButtonTheme: TextButtonThemeData(
-                    style: TextButton.styleFrom(
-                        foregroundColor: theme.colorScheme.onPrimary)),
-                colorScheme: ColorScheme.light(
-                    primary: theme.colorScheme.onPrimary,
-                    onPrimary: Colors.white),
-              ),
-              child: child!,
-            );
-          }).then((time) {
-        todo.dueDate = time ?? DateTime.now();
-        _dueDateControl.text = '${todo.dueDate}';
-      }),
     );
   }
 }
