@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:lubette_todo_flutter/components/navigation.dart';
 import 'package:lubette_todo_flutter/components/navigation_item.dart';
 import 'package:lubette_todo_flutter/controls/main_control.dart';
+import 'package:lubette_todo_flutter/pages/settings_page.dart';
 import 'package:lubette_todo_flutter/views/today_view.dart';
 
 class MainPage extends HookWidget {
@@ -25,22 +26,11 @@ class MainPage extends HookWidget {
               ),
             ),
           ),
-          NavigationItem(
-            title: '任务',
-            isSelected: selected.value == 1,
-            content: TodosView(
-              title: 'Tasks',
-              todos: Get.find<MainControl>().todos['tasks'] ?? [],
-            ),
-          ),
+          // ...buildItems(context),
           NavigationItem(
             title: '设置',
             isSelected: selected.value == 2,
-            content: Center(
-              child: Text(
-                'Settings',
-              ),
-            ),
+            content: SettingsPage(),
           ),
         ],
         onItemTap: (index) {
@@ -51,4 +41,16 @@ class MainPage extends HookWidget {
       ),
     );
   }
+
+  // List<NavigationItem> buildItems(BuildContext context) {
+  //   final data = Get.find<MainControl>().todos;
+  //   final list = [];
+  //   data.forEach(
+  //     (key, value) => list.add(
+  //       NavigationItem(
+  //         title: key,
+  //       ),
+  //     ),
+  //   );
+  // }
 }

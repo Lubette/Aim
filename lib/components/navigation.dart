@@ -20,6 +20,7 @@ class Navigation extends StatelessWidget {
     final media = useMediaQuery(context);
     return Scaffold(
       appBar: AppBar(
+        surfaceTintColor: Colors.transparent,
         title: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.start,

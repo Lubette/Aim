@@ -44,134 +44,137 @@ class TodoPage extends StatelessWidget {
             context,
           ).textTheme.h4,
         ),
+        surfaceTintColor: Colors.transparent,
       ),
-      body: Padding(
-        padding: useEdgeNoOnly(
-          width: media.size.width * 0.04,
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          spacing: media.size.height * 0.02,
-          children: [
-            ShadInputFormField(
-              placeholder: Text(
-                '输入标题',
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: useEdgeNoOnly(
+            width: media.size.width * 0.04,
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            spacing: media.size.height * 0.02,
+            children: [
+              ShadInputFormField(
+                placeholder: Text(
+                  '输入标题',
+                  style: ShadTheme.of(
+                    context,
+                  ).textTheme.p,
+                ),
+                label: Text(
+                  '任务标题',
+                  style: ShadTheme.of(
+                    context,
+                  ).textTheme.h4.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                maxLines: null,
+                minLines: 1,
+                controller: _titleControl,
                 style: ShadTheme.of(
                   context,
                 ).textTheme.p,
               ),
-              label: Text(
-                '任务标题',
-                style: ShadTheme.of(
-                  context,
-                ).textTheme.h4.copyWith(
-                      fontWeight: FontWeight.bold,
-                    ),
-              ),
-              maxLines: null,
-              minLines: 1,
-              controller: _titleControl,
-              style: ShadTheme.of(
-                context,
-              ).textTheme.p,
-            ),
-            ShadInputFormField(
-              placeholder: Text(
-                '输入内容',
+              ShadInputFormField(
+                placeholder: Text(
+                  '输入内容',
+                  style: ShadTheme.of(
+                    context,
+                  ).textTheme.p,
+                ),
+                label: Text(
+                  '任务内容',
+                  style: ShadTheme.of(
+                    context,
+                  ).textTheme.h4.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                maxLines: null,
+                minLines: 2,
+                controller: _docControl,
                 style: ShadTheme.of(
                   context,
                 ).textTheme.p,
               ),
-              label: Text(
-                '任务内容',
-                style: ShadTheme.of(
-                  context,
-                ).textTheme.h4.copyWith(
-                      fontWeight: FontWeight.bold,
+              Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ShadDatePickerFormField(
+                    label: Text(
+                      '截至日期',
+                      style: ShadTheme.of(
+                        context,
+                      ).textTheme.h4.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
                     ),
+                    placeholder: Text(
+                      '选择截至日期',
+                      style: ShadTheme.of(
+                        context,
+                      ).textTheme.p,
+                    ),
+                    onSaved: (date) {
+                      _dueDateControl.text = date.toString();
+                    },
+                  ),
+                  Spacer(),
+                ],
               ),
-              maxLines: null,
-              minLines: 2,
-              controller: _docControl,
-              style: ShadTheme.of(
-                context,
-              ).textTheme.p,
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                ShadDatePickerFormField(
-                  label: Text(
-                    '截至日期',
-                    style: ShadTheme.of(
-                      context,
-                    ).textTheme.h4.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  placeholder: Text(
-                    '选择截至日期',
-                    style: ShadTheme.of(
-                      context,
-                    ).textTheme.p,
-                  ),
-                  onSaved: (date) {
-                    _dueDateControl.text = date.toString();
-                  },
-                ),
-                Spacer(),
-              ],
-            ),
-            Row(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      right: media.size.width * 0.02,
-                    ),
-                    child: SizedBox(
-                      height: media.size.height * 0.08,
-                      child: GetBuilder<MainControl>(
-                        builder: (control) {
-                          return ShadButton(
-                            onPressed: () {
-                              todo.title = _titleControl.text;
-                              todo.description = _docControl.text;
-                              firstPressed(
-                                todo,
-                              );
-                            },
-                            child: Text(
-                              firstText,
-                            ),
-                          );
-                        },
+              Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        right: media.size.width * 0.02,
                       ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      left: media.size.width * 0.02,
-                    ),
-                    child: SizedBox(
-                      height: media.size.height * 0.08,
-                      child: ShadButton.outline(
-                        onPressed: () => secendPressed(todo),
-                        child: Text(
-                          secendText,
+                      child: SizedBox(
+                        height: media.size.height * 0.08,
+                        child: GetBuilder<MainControl>(
+                          builder: (control) {
+                            return ShadButton(
+                              onPressed: () {
+                                todo.title = _titleControl.text;
+                                todo.description = _docControl.text;
+                                firstPressed(
+                                  todo,
+                                );
+                              },
+                              child: Text(
+                                firstText,
+                              ),
+                            );
+                          },
                         ),
                       ),
                     ),
                   ),
-                )
-              ],
-            )
-          ],
+                  Expanded(
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                        left: media.size.width * 0.02,
+                      ),
+                      child: SizedBox(
+                        height: media.size.height * 0.08,
+                        child: ShadButton.outline(
+                          onPressed: () => secendPressed(todo),
+                          child: Text(
+                            secendText,
+                          ),
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );

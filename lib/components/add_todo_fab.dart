@@ -4,6 +4,7 @@ import 'package:lubette_todo_flutter/controls/main_control.dart';
 import 'package:lubette_todo_flutter/controls/use_hooks.dart';
 import 'package:lubette_todo_flutter/data/todo_task.dart';
 import 'package:lubette_todo_flutter/pages/add_todo_page.dart';
+import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:uuid/v8.dart';
 
 class AddTodoFab extends StatelessWidget {
@@ -13,7 +14,7 @@ class AddTodoFab extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = useTheme(context);
     return FloatingActionButton(
-      backgroundColor: theme.colorScheme.onSecondary,
+      backgroundColor: ShadTheme.of(context).primaryButtonTheme.backgroundColor,
       onPressed: () => Get.to(
         () {
           final control = Get.find<MainControl>();
@@ -36,7 +37,7 @@ class AddTodoFab extends StatelessWidget {
       ),
       child: Icon(
         Icons.add,
-        color: theme.colorScheme.secondary,
+        color: ShadTheme.of(context).primaryButtonTheme.foregroundColor,
       ),
     );
   }

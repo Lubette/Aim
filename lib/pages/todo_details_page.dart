@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_highlight/themes/atom-one-dark.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/instance_manager.dart';
 import 'package:lubette_todo_flutter/controls/main_control.dart';
 import 'package:lubette_todo_flutter/controls/use_hooks.dart';
 import 'package:lubette_todo_flutter/data/todo_task.dart';
 import 'package:markdown_widget/markdown_widget.dart';
-import 'package:flutter_highlight/themes/atom-one-dark.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TodoDetailsPage extends HookWidget {
-  const TodoDetailsPage({super.key, required this.todo});
   final TodoTask todo;
+  const TodoDetailsPage({super.key, required this.todo});
   @override
   Widget build(BuildContext context) {
     final media = useMediaQuery(context);
@@ -27,6 +27,7 @@ class TodoDetailsPage extends HookWidget {
             context,
           ).textTheme.h4,
         ),
+        surfaceTintColor: Colors.transparent,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -106,51 +107,84 @@ class TodoDetailsPage extends HookWidget {
                 todo.description.isEmpty
                     ? Container()
                     : ShadCard(
-                        child: MarkdownBlock(
+                        child: MarkdownBody(
                           data: todo.description,
-                          config: MarkdownConfig(
-                            configs: [
-                              PConfig(
-                                textStyle: ShadTheme.of(
-                                  context,
-                                ).textTheme.p,
-                              ),
-                              CodeConfig(
-                                style: ShadTheme.of(
-                                  context,
-                                ).textTheme.p,
-                              ),
-                              LinkConfig(
-                                onTap: (value) => launchUrl(
-                                  Uri.parse(
-                                    value,
-                                  ),
-                                ).then(
-                                  (result) => result
-                                      ? EasyLoading.showToast('打开链接成功')
-                                      : EasyLoading.showToast('打开链接失败'),
-                                ),
-                                style: ShadTheme.of(
-                                  context,
-                                ).textTheme.p.copyWith(
-                                      color: ShadTheme.of(
-                                        context,
-                                      ).colorScheme.primary,
-                                      fontStyle: FontStyle.italic,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                              ),
-                              PreConfig(
-                                theme: atomOneDarkTheme,
-                              ),
-                              CodeConfig(
-                                style: TextStyle(
-                                  fontFamily: 'JBMN',
-                                ),
-                              )
-                            ],
+                          selectable: true,
+                          styleSheet: MarkdownStyleSheet(
+                            p: ShadTheme.of(context).textTheme.p,
+                            code: ShadTheme.of(context).textTheme.p,
+                            h1: ShadTheme.of(context).textTheme.h1,
+                            h2: ShadTheme.of(context).textTheme.h2,
+                            h3: ShadTheme.of(context).textTheme.h3,
+                            h4: ShadTheme.of(context).textTheme.h4,
                           ),
+                          onTapLink: (url, source, referer) {
+                            print('打开链接：$url');
+                            print('$source');
+                            print('$referer');
+                            if (source != null) {
+                              launchUrl(
+                                Uri.parse(
+                                  source,
+                                ),
+                              ).then(
+                                (result) => result
+                                    ? EasyLoading.showToast('打开链接成功')
+                                    : EasyLoading.showToast('打开链接失败'),
+                              );
+                            }
+                          },
                         ),
+                        // child: MarkdownBlock(
+                        //   data: todo.description,
+                        //   config: MarkdownConfig(
+                        //     configs: [
+                        //       PConfig(
+                        //         textStyle: ShadTheme.of(
+                        //           context,
+                        //         ).textTheme.p,
+                        //       ),
+                        //       CodeConfig(
+                        //         style: ShadTheme.of(
+                        //           context,
+                        //         ).textTheme.p,
+                        //       ),
+                        //       LinkConfig(
+                        //         onTap: (value) => launchUrl(
+                        //           Uri.parse(
+                        //             value,
+                        //           ),
+                        //         ).then(
+                        //           (result) => result
+                        //               ? EasyLoading.showToast('打开链接成功')
+                        //               : EasyLoading.showToast('打开链接失败'),
+                        //         ),
+                        //         style: ShadTheme.of(
+                        //           context,
+                        //         ).textTheme.p.copyWith(
+                        //               color: ShadTheme.of(
+                        //                 context,
+                        //               ).colorScheme.primary,
+                        //               fontStyle: FontStyle.italic,
+                        //               decoration: TextDecoration.underline,
+                        //             ),
+                        //       ),
+                        //       PreConfig(
+                        //         theme: atomOneDarkTheme,
+                        //         textStyle: TextStyle(
+                        //           fontFamily: 'JBMN',
+                        //         ),
+                        //       ),
+                        //       CodeConfig(
+                        //         style: ShadTheme.of(
+                        //           context,
+                        //         ).textTheme.p.copyWith(
+                        //               fontFamily: 'JBMN',
+                        //             ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
                       ),
               ],
             ),

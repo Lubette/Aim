@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
 import 'package:lubette_todo_flutter/controls/main_control.dart';
 import 'package:lubette_todo_flutter/pages/main_page.dart';
@@ -40,35 +41,39 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ShadApp.custom(
-      themeMode: ThemeMode.light,
-      theme: ShadThemeData(
-        brightness: Brightness.light,
-        colorScheme: ShadColorScheme.fromName(
-          'zinc',
-          brightness: Brightness.light,
-        ),
-        textTheme: ShadTextTheme(
-          family: 'JBMN',
-        ),
-      ),
-      darkTheme: ShadThemeData(
-        brightness: Brightness.dark,
-        colorScheme: ShadColorScheme.fromName(
-          'zinc',
-          brightness: Brightness.dark,
-        ),
-        textTheme: ShadTextTheme(
-          family: 'JBMN',
-        ),
-      ),
-      appBuilder: (context, theme) => GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        builder: EasyLoading.init(),
-        theme: theme,
-        home: MainPage(),
-        defaultTransition: Transition.native,
-      ),
+    return GetBuilder<MainControl>(
+      builder: (logic) {
+        return ShadApp.custom(
+          themeMode: logic.themeMode,
+          theme: ShadThemeData(
+            brightness: Brightness.light,
+            colorScheme: ShadColorScheme.fromName(
+              logic.theme,
+              brightness: Brightness.light,
+            ),
+            textTheme: ShadTextTheme(
+              family: 'JBMN',
+            ),
+          ),
+          darkTheme: ShadThemeData(
+            brightness: Brightness.dark,
+            colorScheme: ShadColorScheme.fromName(
+              logic.theme,
+              brightness: Brightness.dark,
+            ),
+            textTheme: ShadTextTheme(
+              family: 'JBMN',
+            ),
+          ),
+          appBuilder: (context, theme) => GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            builder: EasyLoading.init(),
+            theme: theme,
+            home: MainPage(),
+            defaultTransition: Transition.native,
+          ),
+        );
+      },
     );
   }
 }

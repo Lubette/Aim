@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lubette_todo_flutter/data/todo_task.dart';
 import 'package:path_provider/path_provider.dart';
@@ -9,15 +10,34 @@ import 'package:uuid/data.dart';
 import 'package:uuid/v8.dart';
 
 class MainControl extends GetxController {
-  Map<String, List<TodoTask>> todos = {};
+  Map<String, (String, List<TodoTask>)> todos = {};
 
   Map<String, String> todoNames = {'today': 'today'};
+  ThemeMode themeMode = ThemeMode.system;
+  String theme = 'zinc';
+
+  void changeTheme(value) {
+    theme = value;
+    update();
+  }
+
+  void changeThemeMode(String value) {
+    switch (value) {
+      case 'dark':
+        themeMode = ThemeMode.dark;
+      case 'light':
+        themeMode = ThemeMode.light;
+      case 'system':
+        themeMode = ThemeMode.system;
+    }
+    update();
+  }
 
   void addTodayTodo(TodoTask task) {
     if (todos['today'] == null) {
-      todos['today'] = [];
+      todos['today'] = ('今日', []);
     }
-    todos['today'] = [...todos['today']!, task];
+    todos['today'] = ('今日', [...todos['today']!.$2, task]);
     update();
     save();
   }
@@ -49,9 +69,9 @@ class MainControl extends GetxController {
 
   void addCustomTodo(String uuid, TodoTask task) {
     if (todos[uuid] == null) {
-      todos[uuid] = [];
+      todos[uuid] = ('未设置名字', []);
     }
-    todos[uuid] = [...todos[uuid]!, task];
+    todos[uuid] = ('未设置名字', [...todos[uuid]!.$2, task]);
     update();
     save();
   }
@@ -63,7 +83,7 @@ class MainControl extends GetxController {
     if (todos['today'] == null) {
       return [];
     }
-    for (var element in todos['today']!) {
+    for (var element in todos['today']!.$2) {
       if (element.isCompleted) {
         if (element.completedDate != null) {
           if (element.completedDate!.isBefore(before)) {
@@ -77,15 +97,15 @@ class MainControl extends GetxController {
   }
 
   List<TodoTask>? uuidTodo(String uuid) {
-    return todos[uuid];
+    return todos[uuid]?.$2;
   }
 
   void setTodo(TodoTask todo) {
     for (var element in todos.entries) {
-      for (var item in element.value) {
+      for (var item in element.value.$2) {
         if (item.id == todo.id) {
-          element.value.remove(item);
-          element.value.add(item);
+          element.value.$2.remove(item);
+          element.value.$2.add(item);
           update();
           save();
           return;
