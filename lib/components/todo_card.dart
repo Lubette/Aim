@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:lubette_todo_flutter/controls/main_control.dart';
 import 'package:lubette_todo_flutter/controls/use_hooks.dart';
 import 'package:lubette_todo_flutter/data/todo_task.dart';
-import 'package:lubette_todo_flutter/pages/add_todo_page.dart';
+import 'package:lubette_todo_flutter/components/add_todo_page.dart';
 import 'package:lubette_todo_flutter/pages/count_time_page.dart';
 import 'package:lubette_todo_flutter/pages/todo_details_page.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
@@ -35,27 +35,27 @@ class TodoCard extends StatelessWidget {
         ),
         ShadContextMenuItem.inset(
           child: Text('修改内容'),
-          onPressed: () => Get.to(
-            TodoPage(
-              taskType: TodoTaskType.normal,
-              title: '修改Todo',
-              todo: todo,
-              firstPressed: (todo) {
-                final controller = Get.find<MainControl>();
-                controller.setTodo(todo);
-                Get.back();
-              },
-              secendPressed: (_) => Get.back(),
-              firstText: '修改',
-              secendText: '退出',
-            ),
+          onPressed: () => showAddTodoSheet(
+            taskType: TodoTaskType.normal,
+            title: '修改Todo',
+            selectEnable: false,
+            todo: todo,
+            firstPressed: (_, todo) {
+              final controller = Get.find<MainControl>();
+              controller.updateTodoTask(todo);
+              Get.back();
+            },
+            secendPressed: (_, __) => Get.back(),
+            firstText: '修改',
+            secendText: '退出',
+            context: context,
           ),
         ),
         ShadContextMenuItem.inset(
           child: Text('删除Todo'),
           onPressed: () {
             final control = Get.find<MainControl>();
-            control.removeTodo(todo.id);
+            control.removeTodoTask(todo.id);
           },
         ),
       ],
@@ -161,7 +161,7 @@ class TodoCard extends StatelessWidget {
         ? () {}
         : () {
             final control = Get.find<MainControl>();
-            control.completed(todo.id);
+            control.completedTodo(todo.id);
           };
     return [
       Visibility(

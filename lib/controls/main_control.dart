@@ -1,206 +1,126 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' as Getx;
 import 'package:lubette_todo_flutter/data/todo_task.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:path/path.dart' as path;
+import 'package:lubette_todo_flutter/data/todo_tasks.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/data.dart';
 import 'package:uuid/v8.dart';
 
-class MainControl extends GetxController {
-  Map<String, (String, List<TodoTask>)> todos = {};
-
-  Map<String, String> todoNames = {'today': 'today'};
+class MainControl extends Getx.GetxController {
   ThemeMode themeMode = ThemeMode.system;
   String theme = 'zinc';
+  List<TodoTasks> todos = [];
 
   void changeTheme(value) {
     theme = value;
+    saveShared();
     update();
+  }
+
+  List<TodoTask> findTodos(String name) {
+    // Add implementation or throw an exception
+    return [];
   }
 
   void changeThemeMode(String value) {
     switch (value) {
       case 'dark':
         themeMode = ThemeMode.dark;
+        break;
       case 'light':
         themeMode = ThemeMode.light;
+        break;
       case 'system':
         themeMode = ThemeMode.system;
+        break;
     }
+    saveShared();
     update();
   }
 
-  void addTodayTodo(TodoTask task) {
-    if (todos['today'] == null) {
-      todos['today'] = ('今日', []);
-    }
-    todos['today'] = ('今日', [...todos['today']!.$2, task]);
-    update();
-    save();
-  }
-
-  void createTodoList(String name) {
-    final uuid = generatTodosUUID(UuidV8());
-    if (todos[uuid] == null) {
-      todos[uuid] = [];
-    }
-    todoNames[uuid] = name;
-    update();
-    save();
-  }
-
-  String generatTodosUUID(UuidV8 uuid) {
-    final id = uuid.generate(
-      options: V8Options(
-        DateTime.now(),
-        null,
-      ),
+  void saveShared() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.setString(
+      'Theme',
+      theme,
     );
-    for (var element in todos.entries) {
-      if (element.key == id) {
-        return generatTodosUUID(uuid);
-      }
-    }
-    return id;
+    prefs.setString(
+      'ThemeMode',
+      themeMode.name,
+    );
+    prefs.setStringList(
+      'Todos',
+      todos
+          .map(
+            (e) => jsonEncode(
+              e.toJson(),
+            ),
+          )
+          .toList()
+          .cast<String>(),
+    );
   }
 
-  void addCustomTodo(String uuid, TodoTask task) {
-    if (todos[uuid] == null) {
-      todos[uuid] = ('未设置名字', []);
+  void loadShared() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    theme = prefs.getString(
+          'Theme',
+        ) ??
+        'zinc';
+    themeMode = ThemeMode.values.byName(
+      prefs.getString(
+            'ThemeMode',
+          ) ??
+          'system',
+    );
+    todos = [];
+    if (prefs.getStringList('Todos') != null) {
+      todos = prefs
+          .getStringList('Todos')!
+          .map(
+            (e) => TodoTasks.fromJson(
+              jsonDecode(e),
+            ),
+          )
+          .toList();
     }
-    todos[uuid] = ('未设置名字', [...todos[uuid]!.$2, task]);
     update();
-    save();
   }
 
-  List<TodoTask>? todayTodo() {
-    var _todos = <TodoTask>[];
-    final time = DateTime.now();
-    final before = DateTime(time.year, time.month, time.day);
-    if (todos['today'] == null) {
-      return [];
+  void addTodoTasks(TodoTasks todotasks) {
+    todos.add(todotasks);
+    saveShared();
+    update();
+  }
+
+  bool addTodoTask(String id, TodoTask todotask) {
+    final index = todos.indexWhere((element) => element.uuid == id);
+    if (index == -1) {
+      return false;
     }
-    for (var element in todos['today']!.$2) {
-      if (element.isCompleted) {
-        if (element.completedDate != null) {
-          if (element.completedDate!.isBefore(before)) {
-            element.isCompleted = true;
-          }
-        }
-      }
-      _todos = [..._todos, element];
-    }
-    return _todos;
+    todos[index].todos.add(todotask);
+    update();
+    saveShared();
+    return true;
   }
 
-  List<TodoTask>? uuidTodo(String uuid) {
-    return todos[uuid]?.$2;
+  String generateTodoUniqueUUID() {
+    UuidV8 v8 = UuidV8();
+    String uuid;
+    do {
+      uuid = v8.generate(options: V8Options(DateTime.now(), []));
+    } while (
+        todos.any((element) => element.todos.any((task) => task.id == uuid)));
+    return uuid;
   }
 
-  void setTodo(TodoTask todo) {
-    for (var element in todos.entries) {
-      for (var item in element.value.$2) {
-        if (item.id == todo.id) {
-          element.value.$2.remove(item);
-          element.value.$2.add(item);
-          update();
-          save();
-          return;
-        }
-      }
-    }
-  }
-
-  void load() async {
-    try {
-      // 获取应用的文档目录
-      final appDocumentsDirectory = await getApplicationDocumentsDirectory();
-      final todosFilePath = path.join(appDocumentsDirectory.path, 'todos.json');
-
-      // 检查文件是否存在
-      final file = File(todosFilePath);
-      if (!file.existsSync()) {
-        print("File does not exist: $todosFilePath");
-        return;
-      }
-
-      // 读取文件内容
-      final fileContent = await file.readAsString();
-      final todosJson = jsonDecode(fileContent) as Map<String, dynamic>;
-
-      // 解析 JSON 数据并更新 todos 和 todoNames
-      todos.clear(); // 清空现有数据
-      todoNames.clear();
-
-      for (final entry in todosJson.entries) {
-        final listKey = entry.key;
-        final listData = entry.value as Map<String, dynamic>;
-        final listName = listData['name'] as String;
-        final todosJsonList = listData['todos'] as List<dynamic>;
-
-        // 将 JSON 数据转换为 TodoTask 列表
-        final todoList =
-            todosJsonList.map((task) => TodoTask.fromJson(task)).toList();
-
-        // 更新 todos 和 todoNames
-        todos[listKey] = todoList;
-        todoNames[listKey] = listName;
-      }
-      update();
-
-      // 打印加载成功信息
-      print("Todos loaded from file: $todosFilePath");
-    } catch (e) {
-      // 捕获异常并打印错误信息
-      print("Error loading todos: $e");
-    }
-  }
-
-  void save() async {
-    // 获取应用的文档目录
-    final appDocumentsDirectory = await getApplicationDocumentsDirectory();
-    final todosFilePath = path.join(appDocumentsDirectory.path, 'todos.json');
-
-    // 创建一个 Map 来存储 JSON 数据
-    final Map<String, dynamic> todosJson = {};
-
-    // 遍历 todos 和 todoNames，将数据转换为 JSON 格式
-    for (final entry in todos.entries) {
-      final listKey = entry.key;
-      final todosList = entry.value;
-
-      // 确保 todoNames 有对应的键
-      final listName = todoNames[listKey] ?? 'Unnamed List';
-
-      // 将 TodoTask 转换为 JSON 格式
-      final todosJsonList = todosList.map((task) => task.toJson()).toList();
-
-      // 将数据存入 todosJson
-      todosJson[listKey] = {
-        'name': listName,
-        'todos': todosJsonList,
-      };
-    }
-
-    // 将 Map 转换为 JSON 字符串
-    final jsonContent = jsonEncode(todosJson);
-
-    // 写入文件
-    final file = File(todosFilePath);
-    await file.writeAsString(jsonContent);
-
-    // 打印保存成功信息
-    print("Todos saved to file: $todosFilePath");
-  }
-
-  bool completed(String uuid) {
-    for (var element in todos.entries) {
-      for (var item in element.value) {
-        if (item.id == uuid) {
-          item.isCompleted = true;
+  bool completedTodo(String id) {
+    for (var todoList in todos) {
+      for (var todo in todoList.todos) {
+        if (todo.id == id) {
+          todo.isCompleted = true;
           update();
           return true;
         }
@@ -209,36 +129,32 @@ class MainControl extends GetxController {
     return false;
   }
 
-  void removeTodo(String uuid) {
-    for (var element in todos.entries) {
-      element.value.removeWhere(
-        (element) {
-          if (element.id == uuid) {
-            update();
-            save();
-            return true;
-          }
-          return false;
-        },
-      );
-    }
+  String generateUniqueUUID() {
+    UuidV8 v8 = UuidV8();
+    String uuid;
+    do {
+      uuid = v8.generate(
+          options: V8Options(DateTime.now(), List<int>.filled(16, 0)));
+    } while (todos.any((element) => element.uuid == uuid));
+    return uuid;
   }
 
-  String generateTodoUUID(UuidV8 uuid) {
-    final id = uuid.generate(
-      options: V8Options(
-        DateTime.now(),
-        null,
-      ),
-    );
-    for (var element in todos.entries) {
-      if (element.value.firstWhereOrNull(
-            (element) => element.id == id,
-          ) !=
-          null) {
-        return generateTodoUUID(uuid);
+  void removeTodoTask(String id) {
+    for (var todoList in todos) {
+      todoList.todos.removeWhere((todo) => todo.id == id);
+    }
+    update();
+  }
+
+  void updateTodoTask(TodoTask updatedTask) {
+    for (var todoList in todos) {
+      for (var i = 0; i < todoList.todos.length; i++) {
+        if (todoList.todos[i].id == updatedTask.id) {
+          todoList.todos[i] = updatedTask;
+          update();
+          return;
+        }
       }
     }
-    return id;
   }
 }

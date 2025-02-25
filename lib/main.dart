@@ -35,7 +35,7 @@ GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
 class App extends StatelessWidget {
   App({super.key}) {
-    _mainControl.load();
+    _mainControl.loadShared();
   }
   final _mainControl = Get.put(MainControl());
 

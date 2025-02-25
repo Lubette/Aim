@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lubette_todo_flutter/components/clock_widget.dart';
 import 'package:lubette_todo_flutter/controls/main_control.dart';
 import 'package:lubette_todo_flutter/controls/use_hooks.dart';
 import 'package:lubette_todo_flutter/data/todo_task.dart';
@@ -24,12 +23,14 @@ class _CountTimePageState extends State<CountTimePage> {
     if (enable) {
       setState(() => enable = false);
       timer?.cancel();
-      Get.find<MainControl>().completed(widget.task.id);
+      Get.find<MainControl>().completedTodo(widget.task.id);
       Get.back();
     } else {
       setState(() => enable = true);
       timer = Timer.periodic(Duration(seconds: 1), (t) {
-        if (enable) setState(() => time = time.add(Duration(seconds: 1)));
+        if (mounted && enable) {
+          setState(() => time = time.add(Duration(seconds: 1)));
+        }
       });
     }
   }

@@ -1,27 +1,46 @@
 # FTodoList
 
+[简体中文](README_ZH.md)
+
+A minimalist Todo software, just for fun, but I will continue to maintain this project.
+
+[1](./images/1.png)
+
+[1](./images/2.png)
 
 ## Getting Started
-Instructions on how to get a copy of the project up and running on your local machine.
 
+```bash
+git clone https://github.com/lubette/FTodoList.git
+cd FTodoList
+flutter pub get
+
+# For Linux
+./build_in_linux.sh
+
+# For Windows
+./build_in_windows.bat
+```
 ### Prerequisites
-List any software, libraries, or hardware needed to run this project.
- Lists : 
- - **List 1** : some description
- - **List 2** : some description
 
+Flutter, Dart environment
 
-### Installing
-A step-by-step guide on how to install the project.
+List:
+  - **List 1**: Some description
+  - **List 2**: Some description
 
 ## Usage
+
 Instructions on how to use the project or its features.
 
-## Contributing
-Guidelines on how to contribute to the project.
+## Contribution Guide
+
+Instructions on how to contribute to the project.
 
 ## License
-This project is licensed under the [License Name] - see the [LICENSE.md](LICENSE.md) file for details.
 
-## Acknowledgments
-Mention anyone who contributed to the project or inspired you. 
+This project is licensed under the [MIT] license - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+Thanks to those who contributed to the project or provided inspiration.

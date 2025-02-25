@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
-import 'package:flutter_highlight/themes/atom-one-dark.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/instance_manager.dart';
 import 'package:lubette_todo_flutter/controls/main_control.dart';
 import 'package:lubette_todo_flutter/controls/use_hooks.dart';
 import 'package:lubette_todo_flutter/data/todo_task.dart';
-import 'package:markdown_widget/markdown_widget.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,6 +17,7 @@ class TodoDetailsPage extends HookWidget {
     final media = useMediaQuery(context);
     final theme = useTheme(context);
     final completed = useState(todo.isCompleted);
+    final tdate = DateTime.parse(todo.startDate);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -76,7 +75,7 @@ class TodoDetailsPage extends HookWidget {
                       ),
                       TextSpan(
                         text:
-                            '${todo.startDate.year}-${todo.startDate.month}-${todo.startDate.day} ${todo.startDate.hour}:${todo.startDate.minute}:${todo.startDate.second}',
+                            '${tdate.year}-${tdate.month}-${tdate.day} ${tdate.hour}:${tdate.minute}:${tdate.second}',
                         style: ShadTheme.of(
                           context,
                         ).textTheme.h4,
@@ -195,7 +194,7 @@ class TodoDetailsPage extends HookWidget {
         backgroundColor: theme.colorScheme.onSecondary,
         onPressed: () {
           if (!completed.value) {
-            if (Get.find<MainControl>().completed(todo.id)) {
+            if (Get.find<MainControl>().completedTodo(todo.id)) {
               completed.value = true;
               EasyLoading.showToast(
                 '完成任务',
