@@ -1,44 +1,44 @@
-# FTodoList
+# 欢迎来到 Aim 👋
 
-一个极简风格的Todo软件，仅仅是用来写着玩玩的，当然我会持续维护这个项目
+<div align="center">
+<img src="assets/logo.png" width="20%" height="20%">
+</div>
 
-![1](./images/1.png)
+![Version](https://img.shields.io/badge/version-1.1.0-blue.svg?cacheSeconds=2592000)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#)
 
-![1](./images/2.png)
+这是一款使用 Flutter 开发并基于 Shadcn 库的TodoList应用程序。我正在逐步对其进行更新，以使其能够应对各种场景。
 
-## 入门指南
+## 用法
 
-```bash
-git clone https://github.com/lubette/FTodoList.git
-cd FTodoList
+```sh
+git clone https://github.com/Lubette/Aim
+cd Aim
 flutter pub get
 
-# Linux执行这个
-./build_in_linux.sh
 
-# Windows执行这个
+# 适用于 Linux
+./build_in_linux.sh
+# 适用于 Android
+./build_in_android.sh
+# 适用于 Windows
 ./build_in_windows.bat
 ```
-### 前置条件
 
-Flutter、Dart环境
+运行测试
 
-列表：
-  - **列表 1**：一些描述
-  - **列表 2**：一些描述
+```bash
+flutter test
+```
 
-## 使用方法
 
-如何使用项目或其功能的说明。
+## 作者
 
-## 贡献指南
+👤 **Jinhong Zeng**
 
-关于如何为项目做出贡献的说明。
+* 网站：https://lubette.github.io/
+* Github：[@lubette](https://github.com/Lubette)
 
-## 许可证
+## 表示支持
 
-本项目采用[MIT]许可——详情请参阅[LICENSE](LICENSE)文件。
-
-## 致谢
-
-感谢为项目做出贡献或给予灵感的人。
+如果这个项目帮到您，请点个Star！

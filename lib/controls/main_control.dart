@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' as Getx;
 import 'package:aim/data/todo_task.dart';
 import 'package:aim/data/todo_tasks.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/data.dart';
 import 'package:uuid/v8.dart';
@@ -126,13 +125,12 @@ class MainControl extends Getx.GetxController {
     if (id == 'Today') {
       print("asdas");
       _today.todos.add(todotask);
-      return true;
-    }
-    if (index == -1) {
+    } else if (index == -1) {
       return false;
+    } else {
+      todotask.id = generateTodoUniqueUUID();
+      todos[index].todos.add(todotask);
     }
-    todotask.id = generateTodoUniqueUUID();
-    todos[index].todos.add(todotask);
     update();
     saveShared();
     return true;
@@ -142,10 +140,10 @@ class MainControl extends Getx.GetxController {
     UuidV8 v8 = UuidV8();
     String uuid;
     do {
-      uuid = v8.generate(options: V8Options(DateTime.now(), []));
+      uuid = v8.generate();
     } while (
         todos.any((element) => element.todos.any((task) => task.id == uuid)));
-    print("ID=${uuid}");
+    print("ID=$uuid");
     return uuid;
   }
 
@@ -176,14 +174,14 @@ class MainControl extends Getx.GetxController {
       uuid = v8.generate(
           options: V8Options(DateTime.now(), List<int>.filled(16, 0)));
     } while (todos.any((element) => element.uuid == uuid));
-    print("ID=${uuid}");
+    print("ID=$uuid");
     return uuid;
   }
 
   void removeTodoTask(String id) {
     for (var todoList in todos) {
       todoList.todos.removeWhere((todo) {
-        print('${todo.id} == ${id}');
+        print('${todo.id} == $id');
         return todo.id == id;
       });
     }

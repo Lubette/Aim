@@ -120,7 +120,7 @@ class TodoDetailsPage extends HookWidget {
                           onTapLink: (url, source, referer) {
                             print('打开链接：$url');
                             print('$source');
-                            print('$referer');
+                            print(referer);
                             if (source != null) {
                               launchUrl(
                                 Uri.parse(

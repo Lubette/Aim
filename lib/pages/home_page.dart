@@ -1,5 +1,4 @@
 import 'package:aim/components/add_todo_page.dart';
-import 'package:aim/components/hot_image.dart';
 import 'package:aim/components/task.dart';
 import 'package:aim/controls/main_control.dart';
 import 'package:aim/controls/use_hooks.dart';

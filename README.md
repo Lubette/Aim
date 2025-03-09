@@ -1,48 +1,48 @@
-# FTodoList
+# Welcome to Aim 👋
 
-![Logo](./assets/logo.png)
+<div  align="center">    
+<img src="assets/logo.png" width="20%" height="20%">
+</div>
 
-[简体中文](README_ZH.md)
+![Version](https://img.shields.io/badge/version-1.1.0-blue.svg?cacheSeconds=2592000)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#)
 
-A minimalist Todo software, just for fun, but I will continue to maintain this project.
+[中文](README_ZH.md)
 
-![1](./images/1.png)
+> This is a to-do list app developed with Flutter and based on the Shadcn library. I am gradually updating it to make it capable of handling various scenarios.
 
-![1](./images/2.png)
+## Usage
 
-## Getting Started
-
-```bash
-git clone https://github.com/lubette/FTodoList.git
+```sh
+git clone https://github.com/lubette/FTodoList
 cd FTodoList
 flutter pub get
 
 # For Linux
 ./build_in_linux.sh
-
+# For Android
+./build_in_android.sh
 # For Windows
 ./build_in_windows.bat
 ```
-### Prerequisites
 
-Flutter, Dart environment
+## Run tests
 
-List:
-  - **List 1**: Some description
-  - **List 2**: Some description
+```sh
+flutter test
+```
 
-## Usage
+## Author
 
-Instructions on how to use the project or its features.
+👤 **Jinhong Zeng**
 
-## Contribution Guide
+* Website: https://lubette.github.io/
+* Github: [@lubette](https://github.com/lubette)
 
-Instructions on how to contribute to the project.
+## Show your support
 
-## License
+Give a ⭐️ if this project helped you!
 
-This project is licensed under the [MIT] license - see the [LICENSE](LICENSE) file for details.
 
-## Acknowledgements
-
-Thanks to those who contributed to the project or provided inspiration.
+***
+_This README was generated with ❤️ by [readme-md-generator](https://github.com/kefranabg/readme-md-generator)_

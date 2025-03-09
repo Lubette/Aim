@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 void showAddTodoGroupNameSheet({
@@ -38,6 +39,7 @@ void showAddTodoGroupNameSheet({
                 final String groupName = controller.text.trim();
                 if (groupName.isNotEmpty) {
                   onGroupNameSubmitted(groupName);
+                  Get.back();
                 }
               },
             ),

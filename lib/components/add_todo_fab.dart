@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:aim/controls/main_control.dart';
-import 'package:aim/controls/use_hooks.dart';
 import 'package:aim/data/todo_task.dart';
 import 'package:aim/components/add_todo_page.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
-import 'package:uuid/v8.dart';
 
 class AddTodoFab extends StatelessWidget {
   const AddTodoFab({super.key});
@@ -28,7 +26,6 @@ class AddTodoFab extends StatelessWidget {
           ),
           firstPressed: (id, todo) {
             control.addTodoTask(id, todo);
-            Get.back();
           },
           firstText: '添加',
           secendPressed: (_, __) {

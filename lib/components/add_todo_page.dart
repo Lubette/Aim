@@ -98,6 +98,7 @@ void showAddTodoSheet({
                         todo.description = docControl.text;
                         todo.dueDate = dueDateControl.text;
                         firstPressed(todosId ?? '', todo);
+                        Get.back();
                       },
                     ),
                   ),
@@ -108,6 +109,7 @@ void showAddTodoSheet({
                       child: Text(secendText),
                       onPressed: () {
                         secendPressed(todosId ?? '', todo);
+                        Get.back();
                       },
                     ),
                   ),

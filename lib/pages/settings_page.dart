@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get/instance_manager.dart';
 import 'package:aim/components/task.dart';
@@ -88,6 +89,7 @@ class SettingsPage extends StatelessWidget {
                           ),
                         );
                         // 你可以在这里执行保存操作等
+                        Get.back();
                       },
                     );
                   },
