@@ -38,8 +38,10 @@ jobs:
           wget -O appimagetool "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
           chmod +x appimagetool
           sudo mv appimagetool /usr/local/bin/
-      - run: ./build_in_linux.sh
+          sudo add-apt-repository universe
+          sudo apt install libfuse2t64
       - run: ./build_in_android.sh
+      - run: ./build_in_linux.sh
   windows:
     runs-on: windows-latest
     steps:
