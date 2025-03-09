@@ -1,11 +1,12 @@
+import 'package:aim/pages/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
-import 'package:lubette_todo_flutter/components/navigation.dart';
-import 'package:lubette_todo_flutter/components/navigation_item.dart';
-import 'package:lubette_todo_flutter/controls/main_control.dart';
-import 'package:lubette_todo_flutter/pages/settings_page.dart';
-import 'package:lubette_todo_flutter/views/today_view.dart';
+import 'package:aim/components/navigation.dart';
+import 'package:aim/components/navigation_item.dart';
+import 'package:aim/controls/main_control.dart';
+import 'package:aim/pages/settings_page.dart';
+import 'package:aim/views/today_view.dart';
 
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
@@ -21,10 +22,15 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       body: Navigation(
         items: [
+          NavigationItem(
+            title: '今日任务',
+            isSelected: selected == 0,
+            content: HomePage(),
+          ),
           ...buildItems(context),
           NavigationItem(
             title: '设置',
-            isSelected: selected == Get.find<MainControl>().todos.length,
+            isSelected: selected == Get.find<MainControl>().todos.length + 1,
             content: SettingsPage(),
           ),
         ],
@@ -40,11 +46,11 @@ class _MainPageState extends State<MainPage> {
   List<NavigationItem> buildItems(BuildContext context) {
     final data = Get.find<MainControl>().todos;
     final list = <NavigationItem>[];
-    int count = 0;
+    int count = 1;
     for (var todos in data) {
       list.add(NavigationItem(
         title: todos.name,
-        isSelected: selected == count,
+        isSelected: selected == count++,
         content: TodosView(title: todos.name, todos: todos.todos),
       ));
     }

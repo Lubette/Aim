@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:lubette_todo_flutter/controls/use_hooks.dart';
-import 'package:lubette_todo_flutter/data/todo_task.dart';
-import 'package:lubette_todo_flutter/views/todo_view.dart';
+import 'package:aim/controls/use_hooks.dart';
+import 'package:aim/data/todo_task.dart';
+import 'package:aim/views/todo_view.dart';
 
 class TaskTodosView extends StatelessWidget {
   const TaskTodosView({

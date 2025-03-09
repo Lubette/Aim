@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lubette_todo_flutter/controls/main_control.dart';
-import 'package:lubette_todo_flutter/controls/use_hooks.dart';
-import 'package:lubette_todo_flutter/data/todo_task.dart';
+import 'package:aim/controls/main_control.dart';
+import 'package:aim/controls/use_hooks.dart';
+import 'package:aim/data/todo_task.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class CountTimePage extends StatefulWidget {

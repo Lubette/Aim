@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lubette_todo_flutter/controls/main_control.dart';
-import 'package:lubette_todo_flutter/controls/use_hooks.dart';
-import 'package:lubette_todo_flutter/data/todo_task.dart';
-import 'package:lubette_todo_flutter/components/add_todo_page.dart';
-import 'package:lubette_todo_flutter/pages/count_time_page.dart';
-import 'package:lubette_todo_flutter/pages/todo_details_page.dart';
+import 'package:aim/controls/main_control.dart';
+import 'package:aim/controls/use_hooks.dart';
+import 'package:aim/data/todo_task.dart';
+import 'package:aim/components/add_todo_page.dart';
+import 'package:aim/pages/count_time_page.dart';
+import 'package:aim/pages/todo_details_page.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class TodoCard extends StatelessWidget {
@@ -13,176 +13,151 @@ class TodoCard extends StatelessWidget {
   const TodoCard({super.key, required this.todo});
   @override
   Widget build(BuildContext context) {
-    final theme = useTheme(context);
-    return ShadContextMenuRegion(
-      constraints: const BoxConstraints(minWidth: 200),
-      items: [
-        ShadContextMenuItem.inset(
-          child: Text('开始计时'),
-          onPressed: () => Get.to(
-            () => CountTimePage(
-              todo,
-            ),
-          ),
-        ),
-        ShadContextMenuItem.inset(
-          child: Text('查看详情'),
-          onPressed: () => Get.to(
-            () => TodoDetailsPage(
-              todo: todo,
-            ),
-          ),
-        ),
-        ShadContextMenuItem.inset(
-          child: Text('修改内容'),
-          onPressed: () => showAddTodoSheet(
-            taskType: TodoTaskType.normal,
-            title: '修改Todo',
-            selectEnable: false,
-            todo: todo,
-            firstPressed: (_, todo) {
-              final controller = Get.find<MainControl>();
-              controller.updateTodoTask(todo);
-              Get.back();
-            },
-            secendPressed: (_, __) => Get.back(),
-            firstText: '修改',
-            secendText: '退出',
-            context: context,
-          ),
-        ),
-        ShadContextMenuItem.inset(
-          child: Text('删除Todo'),
-          onPressed: () {
-            final control = Get.find<MainControl>();
-            control.removeTodoTask(todo.id);
-          },
-        ),
-      ],
-      child: ShadCard(
-        child: LayoutBuilder(
-          builder: (context, box) {
-            return Padding(
-              // padding: EdgeInsets.only(
-              //   left: media.size.width * 0.02,
-              //   right: media.size.width * 0.02,
-              //   top: media.size.height * 0.02,
-              //   bottom: media.size.height * 0.02,
-              // ),
-              padding: useEdgeNoOnly(
-                width: box.minWidth * 0.06,
-                height: box.minHeight * 0.06,
+    return SizedBox(
+      width: 400,
+      height: 250,
+      child: ShadContextMenuRegion(
+        constraints: const BoxConstraints(minWidth: 200),
+        items: [
+          ShadContextMenuItem.inset(
+            child: Text('开始计时'),
+            onPressed: () => Get.to(
+              () => CountTimePage(
+                todo,
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    todo.title,
-                    maxLines: 1,
-                    style: ShadTheme.of(
-                      context,
-                    ).textTheme.h4.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                  ),
-                  RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: '任务状态：',
-                          style: ShadTheme.of(context).textTheme.p,
-                        ),
-                        TextSpan(
-                          text: todo.isCompleted ? '已完成' : '未完成',
-                          style: ShadTheme.of(context).textTheme.p,
-                        )
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: LayoutBuilder(builder: (context, box) {
-                      final lines = (box.maxHeight / (17 * 1.5)).toInt();
-                      printInfo(
-                          info: '!!!!${(box.maxHeight / (16 * 1.5)).toInt()}');
-                      return RichText(
-                        maxLines: lines,
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                              text: '任务内容：',
-                              style: ShadTheme.of(context).textTheme.p,
-                            ),
-                            TextSpan(
-                              text: markdownToPlainText(
-                                todo.description.isNotEmpty
-                                    ? todo.description
-                                    : '无',
-                              ),
-                              style: ShadTheme.of(context).textTheme.p,
-                            )
-                          ],
-                        ),
-                      );
-                      // return Text(
-                      //   '任务内容：${todo.description}',
-                      //   maxLines: lines,
-                      //   overflow: TextOverflow.ellipsis,
-                      //   style: TextStyle(
-                      //     color: theme.colorScheme.onPrimary,
-                      //     fontSize: 17,
-                      //   ),
-                      // );
-                    }),
-                  ),
-                  Row(
+            ),
+          ),
+          ShadContextMenuItem.inset(
+            child: Text('查看详情'),
+            onPressed: () => Get.to(
+              () => TodoDetailsPage(
+                todo: todo,
+              ),
+            ),
+          ),
+          ShadContextMenuItem.inset(
+            child: Text('修改内容'),
+            onPressed: () => showAddTodoSheet(
+              taskType: TodoTaskType.normal,
+              title: '修改Todo',
+              selectEnable: false,
+              todo: todo,
+              firstPressed: (_, todo) {
+                final controller = Get.find<MainControl>();
+                controller.updateTodoTask(todo);
+                Get.back();
+              },
+              secendPressed: (_, __) => Get.back(),
+              firstText: '修改',
+              secendText: '退出',
+              context: context,
+            ),
+          ),
+          ShadContextMenuItem.inset(
+            child: Text('删除Todo'),
+            onPressed: () {
+              final control = Get.find<MainControl>();
+              control.removeTodoTask(todo.id);
+            },
+          ),
+        ],
+        child: ShadCard(
+          child: Padding(
+            padding: const EdgeInsets.all(10),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  todo.title,
+                  maxLines: 1,
+                  style: ShadTheme.of(
+                    context,
+                  ).textTheme.h4.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                ),
+                RichText(
+                  text: TextSpan(
                     children: [
-                      ...buildButton(
-                        context,
-                        (
-                          box.maxWidth,
-                          box.maxHeight,
-                        ),
+                      TextSpan(
+                        text: '任务状态：',
+                        style: ShadTheme.of(context).textTheme.p,
+                      ),
+                      TextSpan(
+                        text: todo.isCompleted ? '已完成' : '未完成',
+                        style: ShadTheme.of(context).textTheme.p,
                       )
                     ],
-                  )
-                ],
-              ),
-            );
-          },
+                  ),
+                ),
+                Expanded(
+                  child: LayoutBuilder(builder: (context, box) {
+                    final lines = (box.maxHeight / (17 * 1.5)).toInt();
+                    return RichText(
+                      maxLines: lines,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: '任务内容：',
+                            style: ShadTheme.of(context).textTheme.p,
+                          ),
+                          TextSpan(
+                            text: markdownToPlainText(
+                              todo.description.isNotEmpty
+                                  ? todo.description
+                                  : '无',
+                            ),
+                            style: ShadTheme.of(context).textTheme.p,
+                          )
+                        ],
+                      ),
+                    );
+                  }),
+                ),
+                Row(
+                  children: [
+                    ...buildButton(
+                      context,
+                    )
+                  ],
+                )
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 
-  List<Widget> buildButton(BuildContext context, (double, double) size) {
-    final title = todo.isCompleted ? '查看详情' : '结束任务';
-    final func = todo.isCompleted
-        ? () {}
-        : () {
-            final control = Get.find<MainControl>();
-            control.completedTodo(todo.id);
-          };
+  List<Widget> buildButton(BuildContext context) {
     return [
       Visibility(
         visible: !todo.isCompleted,
         child: Expanded(
           child: Padding(
-            padding: EdgeInsets.only(right: size.$1 * 0.01),
+            padding: const EdgeInsets.only(right: 10),
             child: ShadButton.outline(
               onPressed: () => Get.to(
                 () => CountTimePage(
                   todo,
                 ),
               ),
-              child: Text('开始计时'),
+              child: Text(
+                '开始计时',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ),
           ),
         ),
       ),
       Expanded(
         child: Padding(
-          padding: EdgeInsets.only(left: size.$1 * 0.01),
+          padding: todo.isCompleted
+              ? EdgeInsets.zero
+              : const EdgeInsets.only(left: 10),
           child: ShadButton.outline(
             onPressed: () => Get.to(
               () => TodoDetailsPage(
@@ -191,6 +166,9 @@ class TodoCard extends StatelessWidget {
             ),
             child: Text(
               '查看详情',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
@@ -202,7 +180,7 @@ class TodoCard extends StatelessWidget {
     List<String> lines = markdown.split('\n');
     List<String> plainTextLines = [];
 
-    lines.forEach((line) {
+    for (var line in lines) {
       // Remove Markdown headers (e.g., # Header)
       line = line.replaceAll(RegExp(r'^#{1,6} '), '');
 
@@ -227,7 +205,7 @@ class TodoCard extends StatelessWidget {
 
       // Handle empty lines
       plainTextLines.add(line.trim());
-    });
+    }
 
     // Join lines and remove multiple spaces
     return plainTextLines

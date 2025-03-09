@@ -1,4 +1,4 @@
-package com.example.lubette_todo_flutter
+package org.lubette.aim
 
 import io.flutter.embedding.android.FlutterActivity
 

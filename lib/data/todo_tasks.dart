@@ -1,5 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
-import 'package:lubette_todo_flutter/data/todo_task.dart';
+import 'package:aim/data/todo_task.dart';
 part 'todo_tasks.g.dart';
 
 @JsonSerializable()

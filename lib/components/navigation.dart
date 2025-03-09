@@ -1,6 +1,10 @@
+import 'package:aim/components/task.dart';
+import 'package:aim/controls/main_control.dart';
+import 'package:aim/data/todo_tasks.dart';
 import 'package:flutter/material.dart';
-import 'package:lubette_todo_flutter/components/navigation_item.dart';
-import 'package:lubette_todo_flutter/controls/use_hooks.dart';
+import 'package:aim/components/navigation_item.dart';
+import 'package:aim/controls/use_hooks.dart';
+import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class Navigation extends StatelessWidget {
@@ -23,7 +27,7 @@ class Navigation extends StatelessWidget {
         surfaceTintColor: Colors.transparent,
         title: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.min,
           children: [
             ...items.map(
@@ -35,6 +39,33 @@ class Navigation extends StatelessWidget {
                 );
               },
             ),
+            GetBuilder<MainControl>(
+              builder: (logic) {
+                return ShadIconButton.ghost(
+                  icon: Icon(
+                    Icons.add_chart,
+                  ),
+                  iconSize: 25,
+                  onPressed: () {
+                    showAddTodoGroupNameSheet(
+                      context: context,
+                      onGroupNameSubmitted: (String name) {
+                        // 在这里处理用户输入的组名
+                        print('用户输入的组名: $name');
+                        logic.addTodoTasks(
+                          TodoTasks(
+                            todos: [],
+                            uuid: logic.generateUniqueUUID(),
+                            name: name,
+                          ),
+                        );
+                        // 你可以在这里执行保存操作等
+                      },
+                    );
+                  },
+                );
+              },
+            )
           ],
         ),
       ),

@@ -3,9 +3,9 @@ import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/instance_manager.dart';
-import 'package:lubette_todo_flutter/controls/main_control.dart';
-import 'package:lubette_todo_flutter/controls/use_hooks.dart';
-import 'package:lubette_todo_flutter/data/todo_task.dart';
+import 'package:aim/controls/main_control.dart';
+import 'package:aim/controls/use_hooks.dart';
+import 'package:aim/data/todo_task.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -191,7 +191,8 @@ class TodoDetailsPage extends HookWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: theme.colorScheme.onSecondary,
+        backgroundColor:
+            ShadTheme.of(context).primaryButtonTheme.backgroundColor,
         onPressed: () {
           if (!completed.value) {
             if (Get.find<MainControl>().completedTodo(todo.id)) {
@@ -208,7 +209,7 @@ class TodoDetailsPage extends HookWidget {
         },
         child: Icon(
           Icons.done,
-          color: theme.colorScheme.secondary,
+          color: ShadTheme.of(context).primaryButtonTheme.foregroundColor,
         ),
       ),
     );

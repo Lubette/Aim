@@ -2,8 +2,9 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' as Getx;
-import 'package:lubette_todo_flutter/data/todo_task.dart';
-import 'package:lubette_todo_flutter/data/todo_tasks.dart';
+import 'package:aim/data/todo_task.dart';
+import 'package:aim/data/todo_tasks.dart';
+import 'package:get/get_connect/http/src/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/data.dart';
 import 'package:uuid/v8.dart';
@@ -12,11 +13,17 @@ class MainControl extends Getx.GetxController {
   ThemeMode themeMode = ThemeMode.system;
   String theme = 'zinc';
   List<TodoTasks> todos = [];
+  TodoTasks _today = TodoTasks(name: 'Today', uuid: 'Today', todos: []);
+  DateTime _todayDate = DateTime.now();
 
   void changeTheme(value) {
     theme = value;
     saveShared();
     update();
+  }
+
+  (TodoTasks, DateTime) today() {
+    return (_today, _todayDate);
   }
 
   List<TodoTask> findTodos(String name) {
@@ -43,6 +50,14 @@ class MainControl extends Getx.GetxController {
   void saveShared() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.setString(
+      'Today',
+      jsonEncode(_today.toJson()),
+    );
+    prefs.setString(
+      'TodayTime',
+      _todayDate.toIso8601String(),
+    );
+    prefs.setString(
       'Theme',
       theme,
     );
@@ -65,6 +80,17 @@ class MainControl extends Getx.GetxController {
 
   void loadShared() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
+    _todayDate =
+        DateTime.tryParse(prefs.getString('TodayTime') ?? "") ?? DateTime.now();
+    if (prefs.getString("Today") == null) {
+      _today = TodoTasks(name: '', uuid: '', todos: []);
+    } else {
+      _today = jsonDecode(prefs.getString("Today")!);
+    }
+    if (_todayDate.isBefore(DateTime.now().subtract(Duration(days: 1)))) {
+      _todayDate = DateTime.now();
+      _today = TodoTasks(name: '', uuid: '', todos: []);
+    }
     theme = prefs.getString(
           'Theme',
         ) ??
@@ -97,9 +123,15 @@ class MainControl extends Getx.GetxController {
 
   bool addTodoTask(String id, TodoTask todotask) {
     final index = todos.indexWhere((element) => element.uuid == id);
+    if (id == 'Today') {
+      print("asdas");
+      _today.todos.add(todotask);
+      return true;
+    }
     if (index == -1) {
       return false;
     }
+    todotask.id = generateTodoUniqueUUID();
     todos[index].todos.add(todotask);
     update();
     saveShared();
@@ -113,10 +145,18 @@ class MainControl extends Getx.GetxController {
       uuid = v8.generate(options: V8Options(DateTime.now(), []));
     } while (
         todos.any((element) => element.todos.any((task) => task.id == uuid)));
+    print("ID=${uuid}");
     return uuid;
   }
 
   bool completedTodo(String id) {
+    for (var todo in _today.todos) {
+      if (todo.id == id) {
+        todo.isCompleted = true;
+        update();
+        return true;
+      }
+    }
     for (var todoList in todos) {
       for (var todo in todoList.todos) {
         if (todo.id == id) {
@@ -136,12 +176,16 @@ class MainControl extends Getx.GetxController {
       uuid = v8.generate(
           options: V8Options(DateTime.now(), List<int>.filled(16, 0)));
     } while (todos.any((element) => element.uuid == uuid));
+    print("ID=${uuid}");
     return uuid;
   }
 
   void removeTodoTask(String id) {
     for (var todoList in todos) {
-      todoList.todos.removeWhere((todo) => todo.id == id);
+      todoList.todos.removeWhere((todo) {
+        print('${todo.id} == ${id}');
+        return todo.id == id;
+      });
     }
     update();
   }
@@ -157,4 +201,10 @@ class MainControl extends Getx.GetxController {
       }
     }
   }
+}
+
+extension on (TodoTasks, DateTime) {
+  set $1(DateTime $1) {}
+
+  set $2(DateTime $2) {}
 }

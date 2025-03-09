@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:get/get.dart';
-import 'package:lubette_todo_flutter/controls/main_control.dart';
-import 'package:lubette_todo_flutter/pages/main_page.dart';
+import 'package:aim/controls/main_control.dart';
+import 'package:aim/pages/main_page.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:window_manager/window_manager.dart';
 

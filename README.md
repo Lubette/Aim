@@ -1,5 +1,7 @@
 # FTodoList
 
+![Logo](./assets/logo.png)
+
 [简体中文](README_ZH.md)
 
 A minimalist Todo software, just for fun, but I will continue to maintain this project.

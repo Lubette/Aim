@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:lubette_todo_flutter/controls/use_hooks.dart';
+import 'package:aim/controls/use_hooks.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class NavigationItem extends StatelessWidget {

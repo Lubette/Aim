@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lubette_todo_flutter/controls/main_control.dart';
-import 'package:lubette_todo_flutter/data/todo_task.dart';
+import 'package:aim/controls/main_control.dart';
+import 'package:aim/data/todo_task.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 void showAddTodoSheet({
@@ -84,6 +84,7 @@ void showAddTodoSheet({
                 },
                 label: const Text('截止日期'),
                 placeholder: const Text('选择日期'),
+                weekStartsOn: 1,
               ),
               const SizedBox(height: 24),
               Row(

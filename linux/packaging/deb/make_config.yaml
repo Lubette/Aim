@@ -1,5 +1,5 @@
-display_name: TodoList
-package_name: TodoList
+display_name: Aim
+package_name: Aim
 
 maintainer:
   name: Lubette
@@ -19,6 +19,7 @@ keywords:
   - Todo
   - List
   - Task
+  - Aim
 
 generic_name: Todo List Appliation
 categories:

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:lubette_todo_flutter/controls/main_control.dart';
-import 'package:lubette_todo_flutter/controls/use_hooks.dart';
-import 'package:lubette_todo_flutter/data/todo_task.dart';
-import 'package:lubette_todo_flutter/components/add_todo_page.dart';
+import 'package:aim/controls/main_control.dart';
+import 'package:aim/controls/use_hooks.dart';
+import 'package:aim/data/todo_task.dart';
+import 'package:aim/components/add_todo_page.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:uuid/v8.dart';
 
