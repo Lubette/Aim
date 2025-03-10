@@ -162,7 +162,8 @@ jobs:
       - name: 创建 Release
         uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref }}
+          # 使用正确的标签名，而不是带有refs/前缀的值
+          tag_name: ${{ github.ref_name }}
           name: Release ${GITHUB_REF#refs/tags/}
           files: |
             release-files/*
