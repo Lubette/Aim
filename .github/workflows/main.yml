@@ -42,7 +42,7 @@ jobs:
           ./build_in_mac.sh
 
       - name: 上传产物
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: macos-artifacts
           path: |
@@ -92,7 +92,7 @@ jobs:
           ./build_in_linux.sh
 
       - name: 上传产物
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: linux-artifacts
           path: |
@@ -133,10 +133,12 @@ jobs:
         run: .\build_in_windows.bat
 
       - name: 上传产物
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: windows-artifacts
-          path: dist/**/*.exe
+          path: |
+            dist/**/*.exe
+            dist/**/*.msix
 
   create-release:
     needs: [macos, linux, windows]
@@ -146,7 +148,7 @@ jobs:
 
     steps:
       - name: 下载所有产物
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           path: artifacts
 
