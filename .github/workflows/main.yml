@@ -160,7 +160,7 @@ jobs:
           ls -lh release-files/
 
       - name: 创建 Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           # 使用正确的标签名，而不是带有refs/前缀的值
           tag_name: ${{ github.ref_name }}
