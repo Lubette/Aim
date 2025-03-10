@@ -1,76 +1,20 @@
 name: 编译构建安装文件
 
 on:
-  workflow_dispatch
-  # push:
-  #   tags:
-  #     - "v*"
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
 
 jobs:
   macos:
     runs-on: macos-latest
     steps:
-      - name: 缓存 Flutter SDK
-        uses: actions/cache@v3
-        with:
-          path: /Users/runner/hostedtoolcache/flutter
-          key: ${{ runner.os }}-flutter-cache
+      - name: 清理旧构建产物
+        run: rm -rf build dist
 
       - name: 下载存储库
         uses: actions/checkout@v4
-
-      - name: 安装 Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          cache: true # 启用内置缓存
-
-      - name: 缓存 Pub 依赖
-        uses: actions/cache@v3
-        with:
-          path: ~/.pub-cache
-          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
-
-      - name: 安装 Flutter Distributor
-        run: dart pub global activate flutter_distributor
-      # - name: 安装 appdmg
-      #   run: npm install -g appdmg
-      - name: 编译 iOS
-        run: flutter build ios --release --no-codesign
-
-      - name: 编译 MacOS
-        run: |
-          flutter build macos
-      #     ./build_in_mac.sh
-      - name: 上传产物
-        uses: actions/upload-artifact@v4
-        with:
-          name: macos-artifacts
-          path: |
-            build/ios/iphoneos/Runner.app
-            build/macos/Build/Products/Release/*.app
-        #    dist/**/*.dmg
-
-  linux:
-    runs-on: ubuntu-latest
-    steps:
-      - name: 缓存 APT 包
-        uses: actions/cache@v3
-        with:
-          path: /var/cache/apt
-          key: ${{ runner.os }}-apt-${{ hashFiles('**/linux_deps.txt') }}
-
-      - name: 下载存储库
-        uses: actions/checkout@v4
-
-      - name: 安装系统依赖
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y ninja-build libgtk-3-dev locate libfuse2
-          wget -O appimagetool "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
-          chmod +x appimagetool
-          sudo mv appimagetool /usr/local/bin/
-          sudo apt-get install rpm patchelf
 
       - name: 安装 Flutter
         uses: subosito/flutter-action@v2
@@ -78,17 +22,53 @@ jobs:
           channel: stable
           cache: true
 
-      - name: 缓存 Pub 依赖
-        uses: actions/cache@v3
-        with:
-          path: ~/.pub-cache
-          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
-
       - name: 安装 Flutter Distributor
         run: dart pub global activate flutter_distributor
 
+      - name: 编译 iOS
+        run: flutter build ios --release --no-codesign
+
+      - name: 编译 MacOS
+        run: |
+          flutter build macos
+          # 生成规范的输出文件名
+          mkdir -p dist/macos
+          cp -r build/macos/Build/Products/Release/*.app dist/macos/
+
+      - name: 上传产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-artifacts
+          path: |
+            dist/macos/*.app
+            build/ios/iphoneos/Runner.app
+
+  linux:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 清理旧构建产物
+        run: rm -rf build dist
+
+      - name: 下载存储库
+        uses: actions/checkout@v4
+
+      - name: 安装系统依赖
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ninja-build libgtk-3-dev libfuse2 rpm patchelf
+          wget -qO appimagetool "https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage"
+          chmod +x appimagetool && sudo mv appimagetool /usr/local/bin/
+
+      - name: 安装 Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+
       - name: 执行编译脚本
         run: |
+          # 确保脚本生成到 dist/ 目录
+          mkdir -p dist
           ./build_in_android.sh
           ./build_in_linux.sh
 
@@ -97,20 +77,16 @@ jobs:
         with:
           name: linux-artifacts
           path: |
-            dist/**/*.apk
-            dist/**/*.aab
-            dist/**/*.AppImage
-            dist/**/*.deb
-            dist/**/*.zip
+            dist/*.apk
+            dist/*.aab
+            dist/*.AppImage
+            dist/*.deb
 
   windows:
     runs-on: windows-latest
     steps:
-      - name: 缓存 Flutter SDK
-        uses: actions/cache@v3
-        with:
-          path: C:\hostedtoolcache\windows\flutter
-          key: ${{ runner.os }}-flutter-cache
+      - name: 清理旧构建产物
+        run: Remove-Item -Recurse -Force build,dist -ErrorAction Ignore
 
       - name: 下载存储库
         uses: actions/checkout@v4
@@ -121,28 +97,20 @@ jobs:
           channel: stable
           cache: true
 
-      - name: 缓存 Pub 依赖
-        uses: actions/cache@v3
-        with:
-          path: ~\AppData\Roaming\Pub\Cache
-          key: ${{ runner.os }}-pub-${{ hashFiles('pubspec.lock') }}
-
-      - name: 安装 Flutter Distributor
-        run: dart pub global activate flutter_distributor
-
       - name: 执行 Windows 编译脚本
-        run: .\build_in_windows.bat
+        run: |
+          mkdir dist
+          .\build_in_windows.bat
 
       - name: 上传产物
         uses: actions/upload-artifact@v4
         with:
           name: windows-artifacts
-          path: |
-            dist/**/*.exe
-            dist/**/*.msix
+          path: dist/*.exe
 
   create-release:
     needs: [macos, linux, windows]
+    if: contains(github.event.ref, 'refs/tags/') # 仅在标签触发时运行
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -153,17 +121,17 @@ jobs:
         with:
           path: artifacts
 
-      - name: 整理文件
+      - name: 过滤有效文件
         run: |
-          mkdir release-files
-          find artifacts -type f -exec cp {} release-files/ \;
-          ls -lh release-files/
+          mkdir -p release-files
+          # 只保留常见发布文件类型
+          find artifacts -type f \( -iname "*.app" -o -iname "*.apk" -o -iname "*.aab" \
+          -o -iname "*.AppImage" -o -iname "*.deb" -o -iname "*.exe" \) \
+          -exec cp {} release-files/ \;
 
       - name: 创建 Release
         uses: softprops/action-gh-release@v2
         with:
-          # 使用正确的标签名，而不是带有refs/前缀的值
           tag_name: ${{ github.ref_name }}
-          name: Release ${GITHUB_REF#refs/tags/}
-          files: |
-            release-files/*
+          name: ${{ github.ref_name }}
+          files: release-files/*
