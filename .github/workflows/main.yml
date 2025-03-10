@@ -33,7 +33,8 @@ jobs:
 
       - name: 安装 Flutter Distributor
         run: dart pub global activate flutter_distributor
-
+      - name: 安装 appdmg
+        run: npm install -g appdmg
       - name: 编译 iOS
         run: flutter build ios --release --no-codesign
 
