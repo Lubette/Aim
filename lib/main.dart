@@ -9,7 +9,9 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:window_manager/window_manager.dart';
 
 void main(List<String> args) async {
+
   WidgetsFlutterBinding.ensureInitialized();
+
   if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
     await windowManager.ensureInitialized();
     WindowOptions windowOptions = WindowOptions(
