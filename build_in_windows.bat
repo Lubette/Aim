@@ -1,1 +1,1 @@
-flutter_distributor package --platform windows --skip-clean --targets msix,exe
+flutter_distributor package --platform windows --skip-clean --targets exe
