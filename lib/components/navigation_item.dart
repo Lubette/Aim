@@ -38,11 +38,8 @@ class NavigationItem extends StatelessWidget {
     return Container(
       decoration: decoration,
       child: Padding(
-        padding: EdgeInsets.only(
-          top: media.size.height * 0.015,
-          bottom: media.size.height * 0.015,
-          left: media.size.width * 0.035,
-          right: media.size.width * 0.035,
+        padding: EdgeInsets.all(
+          20,
         ),
         child: Text(
           title,

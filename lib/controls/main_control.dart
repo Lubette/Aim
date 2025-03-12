@@ -81,10 +81,12 @@ class MainControl extends Getx.GetxController {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
     _todayDate =
         DateTime.tryParse(prefs.getString('TodayTime') ?? "") ?? DateTime.now();
+
+    debugPrint("${prefs.getString("Today")}");
     if (prefs.getString("Today") == null) {
       _today = TodoTasks(name: '', uuid: '', todos: []);
     } else {
-      _today = jsonDecode(prefs.getString("Today")!);
+      _today = TodoTasks.fromJson(jsonDecode(prefs.getString("Today")!));
     }
     if (_todayDate.isBefore(DateTime.now().subtract(Duration(days: 1)))) {
       _todayDate = DateTime.now();

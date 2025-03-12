@@ -25,6 +25,7 @@ class Navigation extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
+        toolbarHeight: 70,
         title: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
@@ -41,28 +42,31 @@ class Navigation extends StatelessWidget {
             ),
             GetBuilder<MainControl>(
               builder: (logic) {
-                return ShadIconButton.ghost(
-                  icon: Icon(
-                    Icons.add_chart,
+                return Padding(
+                  padding: const EdgeInsets.all(10),
+                  child: ShadIconButton.ghost(
+                    icon: Icon(
+                      Icons.add_chart,
+                    ),
+                    iconSize: 25,
+                    onPressed: () {
+                      showAddTodoGroupNameSheet(
+                        context: context,
+                        onGroupNameSubmitted: (String name) {
+                          // 在这里处理用户输入的组名
+                          print('用户输入的组名: $name');
+                          logic.addTodoTasks(
+                            TodoTasks(
+                              todos: [],
+                              uuid: logic.generateUniqueUUID(),
+                              name: name,
+                            ),
+                          );
+                          // 你可以在这里执行保存操作等
+                        },
+                      );
+                    },
                   ),
-                  iconSize: 25,
-                  onPressed: () {
-                    showAddTodoGroupNameSheet(
-                      context: context,
-                      onGroupNameSubmitted: (String name) {
-                        // 在这里处理用户输入的组名
-                        print('用户输入的组名: $name');
-                        logic.addTodoTasks(
-                          TodoTasks(
-                            todos: [],
-                            uuid: logic.generateUniqueUUID(),
-                            name: name,
-                          ),
-                        );
-                        // 你可以在这里执行保存操作等
-                      },
-                    );
-                  },
                 );
               },
             )
