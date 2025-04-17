@@ -1,16 +1,16 @@
+
+import 'package:aim/data/todo_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:aim/controls/main_control.dart';
-import 'package:aim/data/todo_task.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 void showAddTodoSheet({
   required BuildContext context,
-  required TodoTaskType taskType,
   required String title,
-  required TodoTask todo,
-  required void Function(String, TodoTask) firstPressed,
-  required void Function(String, TodoTask) secendPressed,
+  required TodoEntity todo,
+  required void Function(String, TodoEntity) firstPressed,
+  required void Function(String, TodoEntity) secendPressed,
   required String firstText,
   required String secendText,
   String? todosId,
@@ -40,8 +40,8 @@ void showAddTodoSheet({
                   return ShadSelectFormField<String>(
                     placeholder: const Text('选择要添加的任务组'),
                     label: const Text('任务组'),
-                    options: logic.todos
-                        .map((todos) => (todos.uuid, todos.name))
+                    options: logic.groups
+                        .map((group) => (group.key, group.name))
                         .toList()
                         .cast<(String, String)>()
                         .map((e) => ShadOption<String>(
@@ -52,9 +52,9 @@ void showAddTodoSheet({
                     selectedOptionBuilder: (context, value) => value == 'none'
                         ? const Text('Select a verified email to display')
                         : Text(
-                            logic.todos
+                            logic.groups
                                 .firstWhere(
-                                  (element) => element.uuid == value,
+                                  (element) => element.key == value,
                                 )
                                 .name,
                           ),

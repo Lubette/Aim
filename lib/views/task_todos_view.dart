@@ -1,6 +1,5 @@
+import 'package:aim/data/todo_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:aim/controls/use_hooks.dart';
-import 'package:aim/data/todo_task.dart';
 import 'package:aim/views/todo_view.dart';
 
 class TaskTodosView extends StatelessWidget {
@@ -10,12 +9,12 @@ class TaskTodosView extends StatelessWidget {
     required this.tasks,
   });
   final String tasksName;
-  final List<TodoTask> tasks;
+  final List<TodoEntity> tasks;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: useEdgeNoOnly(
-        width: 20,
+      padding: EdgeInsets.symmetric(
+        horizontal: 20,
       ),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,

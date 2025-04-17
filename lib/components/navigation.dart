@@ -1,9 +1,8 @@
-import 'package:aim/components/task.dart';
+import 'package:aim/components/show_add_todo_group_name_sheet.dart';
 import 'package:aim/controls/main_control.dart';
-import 'package:aim/data/todo_tasks.dart';
+import 'package:aim/data/group_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:aim/components/navigation_item.dart';
-import 'package:aim/controls/use_hooks.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
@@ -14,6 +13,7 @@ class Navigation extends StatelessWidget {
     required this.onItemTap,
     required this.selected,
   });
+
   final List<NavigationItem> items;
   final void Function(int) onItemTap;
   final int selected;
@@ -21,7 +21,7 @@ class Navigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var count = 0;
-    final media = useMediaQuery(context);
+    // final media = MediaQuery.sizeOf(context);
     return Scaffold(
       appBar: AppBar(
         surfaceTintColor: Colors.transparent,
@@ -54,13 +54,9 @@ class Navigation extends StatelessWidget {
                         context: context,
                         onGroupNameSubmitted: (String name) {
                           // 在这里处理用户输入的组名
-                          print('用户输入的组名: $name');
-                          logic.addTodoTasks(
-                            TodoTasks(
-                              todos: [],
-                              uuid: logic.generateUniqueUUID(),
-                              name: name,
-                            ),
+                          debugPrint('用户输入的组名: $name');
+                          logic.addGroup(
+                            GroupEntity.fromName(name),
                           );
                           // 你可以在这里执行保存操作等
                         },

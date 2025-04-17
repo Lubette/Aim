@@ -1,14 +1,13 @@
+import 'package:aim/data/todo_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:aim/components/todo_card.dart';
-import 'package:aim/controls/use_hooks.dart';
-import 'package:aim/data/todo_task.dart';
+import 'package:aim/components/todo_tlte.dart';
 
 class TodoView extends StatelessWidget {
   const TodoView({super.key, required this.todos});
-  final List<TodoTask> todos;
+  final List<TodoEntity> todos;
   @override
   Widget build(BuildContext context) {
-    final media = useMediaQuery(context);
+    // final media = MediaQuery.sizeOf(context);
     if (todos.isEmpty) {
       return Center(
         child: Text('没有任务哟~'),

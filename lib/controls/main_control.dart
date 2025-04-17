@@ -1,19 +1,17 @@
 import 'dart:convert';
 
+import 'package:aim/data/group_entity.dart';
+import 'package:aim/data/todo_entity.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart' as Getx;
-import 'package:aim/data/todo_task.dart';
-import 'package:aim/data/todo_tasks.dart';
+import 'package:get/get.dart' as getx;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uuid/data.dart';
 import 'package:uuid/v8.dart';
 
-class MainControl extends Getx.GetxController {
+class MainControl extends getx.GetxController {
   ThemeMode themeMode = ThemeMode.system;
   String theme = 'zinc';
-  List<TodoTasks> todos = [];
-  TodoTasks _today = TodoTasks(name: 'Today', uuid: 'Today', todos: []);
-  DateTime _todayDate = DateTime.now();
+  List<GroupEntity> groups = [];
+  Map<String, TodoEntity> todos = {};
 
   void changeTheme(value) {
     theme = value;
@@ -21,11 +19,7 @@ class MainControl extends Getx.GetxController {
     update();
   }
 
-  (TodoTasks, DateTime) today() {
-    return (_today, _todayDate);
-  }
-
-  List<TodoTask> findTodos(String name) {
+  List<GroupEntity> findTodos(String name) {
     // Add implementation or throw an exception
     return [];
   }
@@ -48,14 +42,14 @@ class MainControl extends Getx.GetxController {
 
   void saveShared() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.setString(
-      'Today',
-      jsonEncode(_today.toJson()),
-    );
-    prefs.setString(
-      'TodayTime',
-      _todayDate.toIso8601String(),
-    );
+    // prefs.setString(
+    //   'Today',
+    //   jsonEncode(_today.toJson()),
+    // );
+    // prefs.setString(
+    //   'TodayTime',
+    //   _todayDate.toIso8601String(),
+    // );
     prefs.setString(
       'Theme',
       theme,
@@ -64,34 +58,36 @@ class MainControl extends Getx.GetxController {
       'ThemeMode',
       themeMode.name,
     );
+    prefs.setString(
+      'Groups',
+      jsonEncode(
+        groups.map((ele) => ele.toJson()).cast().toList(),
+      ),
+    );
     prefs.setStringList(
-      'Todos',
-      todos
-          .map(
-            (e) => jsonEncode(
-              e.toJson(),
-            ),
-          )
-          .toList()
-          .cast<String>(),
+      "Todos",
+      todos.values
+          .map((ele) => ele.toJson())
+          .map((ele) => jsonEncode(ele))
+          .toList(),
     );
   }
 
   void loadShared() async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    _todayDate =
-        DateTime.tryParse(prefs.getString('TodayTime') ?? "") ?? DateTime.now();
-
-    debugPrint("${prefs.getString("Today")}");
-    if (prefs.getString("Today") == null) {
-      _today = TodoTasks(name: '', uuid: '', todos: []);
-    } else {
-      _today = TodoTasks.fromJson(jsonDecode(prefs.getString("Today")!));
-    }
-    if (_todayDate.isBefore(DateTime.now().subtract(Duration(days: 1)))) {
-      _todayDate = DateTime.now();
-      _today = TodoTasks(name: '', uuid: '', todos: []);
-    }
+    // _todayDate =
+    //     DateTime.tryParse(prefs.getString('TodayTime') ?? "") ?? DateTime.now();
+    //
+    // debugPrint("${prefs.getString("Today")}");
+    // if (prefs.getString("Today") == null) {
+    //   _today = TodoTasks(name: '', uuid: '', groups: []);
+    // } else {
+    //   _today = TodoTasks.fromJson(jsonDecode(prefs.getString("Today")!));
+    // }
+    // if (_todayDate.isBefore(DateTime.now().subtract(Duration(days: 1)))) {
+    //   _todayDate = DateTime.now();
+    //   _today = TodoTasks(name: '', uuid: '', groups: []);
+    // }
     theme = prefs.getString(
           'Theme',
         ) ??
@@ -102,37 +98,29 @@ class MainControl extends Getx.GetxController {
           ) ??
           'system',
     );
-    todos = [];
+    groups = [];
+    todos = {};
     if (prefs.getStringList('Todos') != null) {
-      todos = prefs
-          .getStringList('Todos')!
-          .map(
-            (e) => TodoTasks.fromJson(
-              jsonDecode(e),
-            ),
-          )
-          .toList();
+      for (var e in prefs.getStringList('Todos')!) {
+        final todo = TodoEntity.fromJson(
+          jsonDecode(e),
+        );
+        todos[todo.key] = todo;
+      }
     }
     update();
   }
 
-  void addTodoTasks(TodoTasks todotasks) {
-    todos.add(todotasks);
+  void addGroup(GroupEntity group) {
+    group.key = generateUniqueUUID();
+    groups.add(group);
     saveShared();
     update();
   }
 
-  bool addTodoTask(String id, TodoTask todotask) {
-    final index = todos.indexWhere((element) => element.uuid == id);
-    if (id == 'Today') {
-      print("asdas");
-      _today.todos.add(todotask);
-    } else if (index == -1) {
-      return false;
-    } else {
-      todotask.id = generateTodoUniqueUUID();
-      todos[index].todos.add(todotask);
-    }
+  bool addTodoTask(String id, TodoEntity todo) {
+    todo.key = generateTodoUniqueUUID();
+    todos[todo.key] = todo;
     update();
     saveShared();
     return true;
@@ -143,68 +131,30 @@ class MainControl extends Getx.GetxController {
     String uuid;
     do {
       uuid = v8.generate();
-    } while (
-        todos.any((element) => element.todos.any((task) => task.id == uuid)));
-    print("ID=$uuid");
+    } while (todos[uuid] != null);
+    debugPrint("ID=$uuid");
     return uuid;
   }
 
-  bool completedTodo(String id) {
-    for (var todo in _today.todos) {
-      if (todo.id == id) {
-        todo.isCompleted = true;
-        update();
-        return true;
-      }
-    }
-    for (var todoList in todos) {
-      for (var todo in todoList.todos) {
-        if (todo.id == id) {
-          todo.isCompleted = true;
-          update();
-          return true;
-        }
-      }
-    }
-    return false;
+  void completedTodo(String id) {
+    todos[id]?.compeled = true;
   }
 
   String generateUniqueUUID() {
     UuidV8 v8 = UuidV8();
     String uuid;
     do {
-      uuid = v8.generate(
-          options: V8Options(DateTime.now(), List<int>.filled(16, 0)));
-    } while (todos.any((element) => element.uuid == uuid));
-    print("ID=$uuid");
+      uuid = v8.generate();
+    } while (groups.any((element) => element.key == uuid));
     return uuid;
   }
 
   void removeTodoTask(String id) {
-    for (var todoList in todos) {
-      todoList.todos.removeWhere((todo) {
-        print('${todo.id} == $id');
-        return todo.id == id;
-      });
-    }
-    update();
+    todos.remove(id);
+    update([id]);
   }
 
-  void updateTodoTask(TodoTask updatedTask) {
-    for (var todoList in todos) {
-      for (var i = 0; i < todoList.todos.length; i++) {
-        if (todoList.todos[i].id == updatedTask.id) {
-          todoList.todos[i] = updatedTask;
-          update();
-          return;
-        }
-      }
-    }
+  void updateTodoTask(TodoEntity todo) {
+    todos[todo.key] != null ? todos[todo.key] = todo : todo;
   }
-}
-
-extension on (TodoTasks, DateTime) {
-  set $1(DateTime $1) {}
-
-  set $2(DateTime $2) {}
 }

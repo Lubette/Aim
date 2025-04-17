@@ -1,18 +1,18 @@
+import 'package:aim/data/group_entity.dart';
+import 'package:aim/data/todo_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_expandable_fab/flutter_expandable_fab.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get/instance_manager.dart';
-import 'package:aim/components/task.dart';
+import 'package:aim/components/show_add_todo_group_name_sheet.dart';
 import 'package:aim/controls/main_control.dart';
-import 'package:aim/controls/use_hooks.dart';
-import 'package:aim/data/todo_task.dart';
 import 'package:aim/components/add_todo_page.dart';
-import 'package:aim/data/todo_tasks.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key});
+
   static const themes = [
     'blue',
     'gray',
@@ -28,10 +28,12 @@ class SettingsPage extends StatelessWidget {
     'zinc',
   ];
   static const themeModes = ['dark', 'light', 'system'];
+
   @override
   Widget build(BuildContext context) {
-    final media = useMediaQuery(context);
+    final media = MediaQuery.sizeOf(context);
     return Scaffold(
+      appBar: AppBar(),
       floatingActionButtonLocation: ExpandableFab.location,
       floatingActionButton: ExpandableFab(
         type: ExpandableFabType.fan,
@@ -46,15 +48,9 @@ class SettingsPage extends StatelessWidget {
                 onPressed: () {
                   final control = Get.find<MainControl>();
                   return showAddTodoSheet(
-                    taskType: TodoTaskType.today,
                     selectEnable: true,
                     title: '添加任务',
-                    todo: TodoTask(
-                      id: '',
-                      title: '',
-                      startDate: DateTime.now().toString(),
-                      description: '',
-                    ),
+                    todo: TodoEntity(),
                     firstPressed: (id, todo) {
                       control.addTodoTask(id, todo);
                     },
@@ -80,12 +76,10 @@ class SettingsPage extends StatelessWidget {
                       context: context,
                       onGroupNameSubmitted: (String name) {
                         // 在这里处理用户输入的组名
-                        print('用户输入的组名: $name');
-                        logic.addTodoTasks(
-                          TodoTasks(
-                            todos: [],
-                            uuid: logic.generateUniqueUUID(),
-                            name: name,
+                        debugPrint('用户输入的组名: $name');
+                        logic.addGroup(
+                          GroupEntity.fromName(
+                            name,
                           ),
                         );
                         // 你可以在这里执行保存操作等
@@ -101,9 +95,8 @@ class SettingsPage extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: useEdgeNoOnly(
-          width: media.size.width * 0.04,
-          height: media.size.height * 0.04,
+        padding: EdgeInsets.symmetric(
+          horizontal: media.height * 0.04,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,

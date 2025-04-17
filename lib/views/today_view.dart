@@ -1,12 +1,11 @@
+import 'package:aim/data/todo_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:aim/components/add_todo_fab.dart';
-import 'package:aim/controls/use_hooks.dart';
-import 'package:aim/data/todo_task.dart';
 import 'package:aim/views/todo_view.dart';
 
 class TodosView extends StatelessWidget {
   final String title;
-  final List<TodoTask> todos;
+  final List<TodoEntity> todos;
   const TodosView({
     super.key,
     required this.title,
@@ -15,11 +14,11 @@ class TodosView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final media = useMediaQuery(context);
+    final media = MediaQuery.sizeOf(context);
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(
-          media.size.height * 0.025,
+          media.height * 0.025,
         ),
         child: TodoView(
           todos: todos,

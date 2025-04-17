@@ -1,23 +1,23 @@
+import 'package:aim/data/todo_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
 import 'package:get/instance_manager.dart';
 import 'package:aim/controls/main_control.dart';
-import 'package:aim/controls/use_hooks.dart';
-import 'package:aim/data/todo_task.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class TodoDetailsPage extends HookWidget {
-  final TodoTask todo;
+  final TodoEntity todo;
+
   const TodoDetailsPage({super.key, required this.todo});
+
   @override
   Widget build(BuildContext context) {
-    final media = useMediaQuery(context);
-    final theme = useTheme(context);
-    final completed = useState(todo.isCompleted);
-    final tdate = DateTime.parse(todo.startDate);
+    final media = MediaQuery.sizeOf(context);
+    final completed = useState(todo.compeled);
+    final tdate = DateTime.parse(todo.createdDate);
     return Scaffold(
       appBar: AppBar(
         title: Text(
@@ -30,12 +30,12 @@ class TodoDetailsPage extends HookWidget {
       ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: useEdgeNoOnly(
-            width: media.size.width * 0.04,
+          padding: EdgeInsets.symmetric(
+            horizontal: media.width * 0.04,
           ),
           child: Padding(
             padding: EdgeInsets.only(
-              bottom: media.size.height * 0.04,
+              bottom: media.height * 0.04,
             ),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.start,
@@ -118,9 +118,9 @@ class TodoDetailsPage extends HookWidget {
                             h4: ShadTheme.of(context).textTheme.h4,
                           ),
                           onTapLink: (url, source, referer) {
-                            print('打开链接：$url');
-                            print('$source');
-                            print(referer);
+                            debugPrint('打开链接：$url');
+                            debugPrint('$source');
+                            debugPrint(referer);
                             if (source != null) {
                               launchUrl(
                                 Uri.parse(
@@ -195,16 +195,11 @@ class TodoDetailsPage extends HookWidget {
             ShadTheme.of(context).primaryButtonTheme.backgroundColor,
         onPressed: () {
           if (!completed.value) {
-            if (Get.find<MainControl>().completedTodo(todo.id)) {
-              completed.value = true;
-              EasyLoading.showToast(
-                '完成任务',
-              );
-            } else {
-              EasyLoading.showToast(
-                '不知道什么原因没有完成任务',
-              );
-            }
+            (Get.find<MainControl>().completedTodo(todo.key));
+            completed.value = true;
+            EasyLoading.showToast(
+              '完成任务',
+            );
           }
         },
         child: Icon(

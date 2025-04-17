@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:aim/controls/use_hooks.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class NavigationItem extends StatelessWidget {
@@ -14,7 +13,6 @@ class NavigationItem extends StatelessWidget {
   final Widget content;
   @override
   Widget build(BuildContext context) {
-    final theme = useTheme(context);
     final (decoration, fontWidget) = !isSelected
         ? (
             BoxDecoration(
@@ -34,7 +32,7 @@ class NavigationItem extends StatelessWidget {
             ),
             FontWeight.bold,
           );
-    final media = useMediaQuery(context);
+    // final media = MediaQuery.sizeOf(context);
     return Container(
       decoration: decoration,
       child: Padding(
