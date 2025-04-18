@@ -120,6 +120,7 @@ class MainControl extends getx.GetxController {
 
   bool addTodoTask(String id, TodoEntity todo) {
     todo.key = generateTodoUniqueUUID();
+    todo.todosKey = id;
     todos[todo.key] = todo;
     update();
     saveShared();

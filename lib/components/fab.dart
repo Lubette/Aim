@@ -8,7 +8,7 @@ import 'package:shadcn_ui/shadcn_ui.dart';
 import '../controls/main_control.dart';
 import '../data/group_entity.dart';
 import '../data/todo_entity.dart';
-import 'add_todo_page.dart';
+import 'show_add_todo_sheet.dart';
 
 class Fab extends StatelessWidget {
   const Fab({super.key});
@@ -16,13 +16,19 @@ class Fab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = ShadTheme.of(context).textTheme;
+    if (Get.find<MainControl>().groups.isEmpty) {
+      return Container();
+    }
     return ExpandableFab(
       type: ExpandableFabType.fan,
       childrenAnimation: ExpandableFabAnimation.none,
       children: [
         Row(
           children: [
-            Text('任务',style: theme.p,),
+            Text(
+              '任务',
+              style: theme.p,
+            ),
             SizedBox(width: 20),
             FloatingActionButton(
               heroTag: null,
@@ -48,7 +54,10 @@ class Fab extends StatelessWidget {
         ),
         Row(
           children: [
-            Text('任务组',style: theme.p,),
+            Text(
+              '任务组',
+              style: theme.p,
+            ),
             SizedBox(width: 20),
             GetBuilder<MainControl>(builder: (logic) {
               return FloatingActionButton(
@@ -71,7 +80,10 @@ class Fab extends StatelessWidget {
         ),
         Row(
           children: [
-            Text('设置',style: theme.p,),
+            Text(
+              '设置',
+              style: theme.p,
+            ),
             SizedBox(width: 20),
             FloatingActionButton(
               heroTag: null,

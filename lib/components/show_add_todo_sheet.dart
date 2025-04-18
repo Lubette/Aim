@@ -1,4 +1,3 @@
-
 import 'package:aim/data/todo_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,32 +34,31 @@ void showAddTodoSheet({
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const SizedBox(height: 16),
-              if (selectEnable)
-                GetBuilder<MainControl>(builder: (logic) {
-                  return ShadSelectFormField<String>(
-                    placeholder: const Text('选择要添加的任务组'),
-                    label: const Text('任务组'),
-                    options: logic.groups
-                        .map((group) => (group.key, group.name))
-                        .toList()
-                        .cast<(String, String)>()
-                        .map((e) => ShadOption<String>(
-                              value: e.$1,
-                              child: Text(e.$2),
-                            ))
-                        .toList(),
-                    selectedOptionBuilder: (context, value) => value == 'none'
-                        ? const Text('Select a verified email to display')
-                        : Text(
-                            logic.groups
-                                .firstWhere(
-                                  (element) => element.key == value,
-                                )
-                                .name,
-                          ),
-                    onChanged: (String? id) => todosId = id ?? '',
-                  );
-                }),
+              GetBuilder<MainControl>(builder: (logic) {
+                return ShadSelectFormField<String>(
+                  placeholder: const Text('选择要添加的任务组'),
+                  label: const Text('任务组'),
+                  options: logic.groups
+                      .map((group) => (group.key, group.name))
+                      .toList()
+                      .cast<(String, String)>()
+                      .map((e) => ShadOption<String>(
+                            value: e.$1,
+                            child: Text(e.$2),
+                          ))
+                      .toList(),
+                  selectedOptionBuilder: (context, value) => value == 'none'
+                      ? const Text('Select a verified email to display')
+                      : Text(
+                          logic.groups
+                              .firstWhere(
+                                (element) => element.key == value,
+                              )
+                              .name,
+                        ),
+                  onChanged: (String? id) => todosId = id ?? '',
+                );
+              }),
               const SizedBox(height: 16),
               ShadInputFormField(
                 controller: titleControl,
@@ -94,9 +92,11 @@ void showAddTodoSheet({
                     child: ShadButton(
                       child: Text(firstText),
                       onPressed: () {
+                        debugPrint('$todosId');
                         todo.title = titleControl.text;
                         todo.description = docControl.text;
                         todo.dueDate = dueDateControl.text;
+                        todo.createdDate = DateTime.now().toIso8601String();
                         firstPressed(todosId ?? '', todo);
                         Get.back();
                       },

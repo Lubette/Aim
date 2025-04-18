@@ -2,7 +2,7 @@ import 'package:aim/data/todo_entity.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:aim/controls/main_control.dart';
-import 'package:aim/components/add_todo_page.dart';
+import 'package:aim/components/show_add_todo_sheet.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class AddTodoFab extends StatelessWidget {
@@ -17,8 +17,7 @@ class AddTodoFab extends StatelessWidget {
         return showAddTodoSheet(
           selectEnable: true,
           title: '添加任务',
-          todo: TodoEntity(
-          ),
+          todo: TodoEntity(),
           firstPressed: (id, todo) {
             control.addTodoTask(id, todo);
           },

@@ -7,7 +7,7 @@ import 'package:get/get_state_manager/src/simple/get_state.dart';
 import 'package:get/instance_manager.dart';
 import 'package:aim/components/show_add_todo_group_name_sheet.dart';
 import 'package:aim/controls/main_control.dart';
-import 'package:aim/components/add_todo_page.dart';
+import 'package:aim/components/show_add_todo_sheet.dart';
 import 'package:shadcn_ui/shadcn_ui.dart';
 
 class SettingsPage extends StatelessWidget {
