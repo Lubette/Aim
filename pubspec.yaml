@@ -49,6 +49,7 @@ dependencies:
   flutter_expandable_fab: ^2.3.0
   rename_app: ^1.6.2
   layout: ^1.0.5
+  easy_sidemenu: ^0.6.1
 
 dev_dependencies:
   flutter_test:
